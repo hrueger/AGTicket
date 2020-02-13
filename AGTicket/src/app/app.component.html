@@ -1,0 +1,8 @@
+<navbar (toggleNav)="showNav = $event" *ngIf="currentUser"></navbar>
+<div [class.container-fluid]="currentUser">
+    <div [class.row]="currentUser">
+        <main [attr.role]="currentUser ? 'main' : ''" [class]="currentUser ? 'col-10 mx-auto' : 'backgroundPattern'">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

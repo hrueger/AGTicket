@@ -1,0 +1,226 @@
+<button
+    id="newBtn"
+    type="button"
+    (click)="openNewModal(newUserModal)"
+    class="btn btn-outline-primary mr-1"
+>
+    {{'users.newUser' | translate}}
+</button>
+<button
+    id="mailToAll"
+    type="button"
+    (click)="mailToAll()"
+    class="btn btn-outline-primary mr-1"
+>
+    {{'users.mailToAll' | translate}}
+</button>
+<button
+    id="editBtn"
+    type="button"
+    (click)="openEditModal(editUserModal)"
+    class="btn btn-outline-primary"
+>
+    {{'users.changeOwnProfile' | translate}}
+</button>
+<br /><br />
+<div class="table-responsive">
+    <table id="users" class="table  table-hover table-striped table-sm">
+        <thead>
+            <tr>
+                <th>{{'general.name' | translate}}</th>
+                <th>{{'general.email' | translate}}</th>
+                <th>{{'users.isAdmin' | translate}}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ (user.isAdmin ? 'general.yes' : 'general.no') | translate }}</td>
+
+                <td>
+                    <button class="btn text-danger btn-link" (click)="deleteUser(user)">
+                        {{'general.delete' | translate}}
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<ng-template #newUserModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'users.newUser' | translate}}</h4>
+        <button
+            type="button"
+            class="close"
+            (click)="modal.dismiss('Cross click')"
+        >
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="invalidMessage" class="alert alert-danger">
+            {{'errors.requiredFieldsMissing' | translate}}
+        </div>
+        <form [formGroup]="newUserForm">
+            <div class="form-group">
+                <label for="name">{{'general.username' | translate}}: </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    formControlName="name"
+                    [placeholder]="'general.username' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="email">{{'general.email' | translate}}: </label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    formControlName="email"
+                    [placeholder]="'general.email' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="password1">{{'general.password' | translate}}: </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="password1"
+                    formControlName="password1"
+                    [placeholder]="'general.password' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="password2">{{'users.repeatPassword' | translate}}: </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="password2"
+                    formControlName="password2"
+                    [placeholder]="'users.repeatPassword' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="isAdmin">{{'users.isAdmin' | translate}}: </label>
+                <select class="form-control" id="isAdmin" formControlName="isAdmin">
+                    <option value="Standard" selected>Standard</option>
+                    <option value="Super">Super</option>
+                </select>
+            </div>
+            <br />
+            <br />
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="
+                !newUserForm.invalid
+                    ? modal.close('Save click')
+                    : (invalidMessage = true)
+            "
+        >
+            {{'general.create' | translate}}
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #editUserModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'users.changeOwnProfile' | translate}}</h4>
+        <button
+            type="button"
+            class="close"
+            (click)="modal.dismiss('Cross click')"
+        >
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="invalidMessage" class="alert alert-danger">
+            {{'errors.requiredFieldsMissing' | translate}}
+        </div>
+        <form [formGroup]="editUserForm">
+            <div class="form-group">
+                <label for="name">{{'general.username' | translate}}: </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    formControlName="editUserName"
+                    [placeholder]="'general.username' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="email">{{'general.email' | translate}}: </label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    formControlName="editUserEmail"
+                    [placeholder]="'general.username' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="password">{{'users.oldPassword' | translate}}: </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    formControlName="editUserPasswordOld"
+                    [placeholder]="'users.oldPassword' | translate"
+                />
+            </div>
+            <div class="alert alert-info">
+                {{'users.changesPasswordInfo' | translate}}
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="password1">{{'login.inputNewPassword' | translate}}: </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="password1"
+                    formControlName="editUserPassword1"
+                    [placeholder]="'login.inputNewPassword' | translate"
+                />
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="password2">{{'login.repeatNewPassword' | translate}}: </label>
+                <input
+                    type="password"
+                    class="form-control"
+                    id="password2"
+                    formControlName="editUserPassword2"
+                    [placeholder]="'login.repeatNewPassword' | translate"
+                />
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="
+                !editUserForm.invalid
+                    ? modal.close('Save click')
+                    : (invalidMessage = true)
+            "
+        >
+            {{'general.update' | translate}}
+        </button>
+    </div>
+</ng-template>

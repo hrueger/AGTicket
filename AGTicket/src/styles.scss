@@ -1,0 +1,97 @@
+$primary: darken(#428bca, 6.5%) !default; // #337ab7
+$success: #5cb85c !default;
+$info: #5bc0de !default;
+$warning: #f0ad4e !default;
+$danger: #d9534f !default;
+$enable-rounded: false;
+@import "../node_modules/@syncfusion/ej2-base/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-lists/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-angular-popups/styles/bootstrap.css";
+@import '../node_modules/@syncfusion/ej2-calendars/styles/bootstrap.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/bootstrap.css';  
+@import "../node_modules/@syncfusion/ej2-navigations/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-angular-inputs/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-angular-navigations/styles/bootstrap.css";
+@import "../node_modules/@syncfusion/ej2-angular-layouts/styles/bootstrap.css";
+@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/bootstrap.css';  
+@import '../node_modules/@syncfusion/ej2-angular-grids/styles/bootstrap.css';
+
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~@fortawesome/fontawesome-free/css/all.css";
+@import '~ngx-toastr/toastr-bs4-alert';
+.table-sm td,
+.table-sm th {
+    vertical-align: middle;
+    padding: 0.2rem;
+    padding-left: 1rem;
+}
+
+html {
+    overflow-y: auto !important;
+    overflow-x: hidden;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+body {
+    font-family: "Open Sans", sans-serif !important;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
+
+.navbar .form-control {
+    border-width: 0;
+}
+
+* {
+    border-radius: 0 !important;
+}
+
+[role="main"] {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.e-content {
+    padding-top: 1rem;
+}
+
+ngb-modal-backdrop {
+    z-index: 1400 !important;
+}
+ngb-modal-window {
+    z-index: 1500 !important;
+}
+
+.sortable::before {
+    content: "\f0dc";
+    display: block;
+    font-family: 'Font Awesome 5 Free';
+    width: 15px;
+    height: 15px;
+    float: left;
+    margin-left: -15px;
+    color: rgba(0, 0, 0, 0.2);
+}
+.sortedAsc::before, .sortedDesc::before {
+    content: "\f0de";
+    display: block;
+    font-family: 'Font Awesome 5 Free';
+    width: 15px;
+    height: 15px;
+    float: left;
+    margin-left: -15px;
+    color: #000;
+}
+.sortedDesc::before {
+    content: "\f0dd";
+}
+th.sortable {
+    cursor: pointer;
+}

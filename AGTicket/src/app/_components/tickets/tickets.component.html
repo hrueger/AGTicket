@@ -1,0 +1,12 @@
+<div class="alert alert-warning" *ngIf="!tickets || tickets.length == 0">
+    Keine Tickets gefunden!<br>
+    <a routerLink="/createTickets">Tickets erstellen</a>
+</div>
+<ejs-grid #grid [dataSource]="tickets" [allowPaging]="true" [toolbar]="toolbar" [allowResizing]="true" [pageSettings]="pageSettings" [allowSorting]="true" [allowPdfExport]='true' (toolbarClick)='toolbarClick($event)'>
+    <e-columns>
+        <e-column field='Name' headerText='Order ID' textAlign='Right' width=120></e-column>
+        <e-column field='Nr' headerText='Customer ID' width=150></e-column>
+        <e-column field='Erstellt' headerText='Ship City' width=150></e-column>
+        <e-column field='Geändert' headerText='Ship Name' width=150></e-column>
+    </e-columns>
+</ejs-grid>

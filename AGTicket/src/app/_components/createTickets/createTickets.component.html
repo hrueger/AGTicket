@@ -1,0 +1,61 @@
+<ejs-tab id="element">
+    <div class="e-tab-header">
+        <div>
+            Einzelnes Ticket
+        </div>
+        <div>
+            Mehrere Tickets
+        </div>
+        <div>
+            CSV importieren
+        </div>
+    </div>
+    <div class="e-content">
+        <div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="guid">Nr</label>
+                    <input type="text" disabled [(ngModel)]="guid" class="form-control" id="guid">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Name (gerne auch leer lassen)</label>
+                    <input type="text" [(ngModel)]="name" class="form-control" id="guid">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="save">Speichern</label>
+                    <button id="save" class="form-control btn btn-outline-success"
+                        (click)="saveOne()">Speichern</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="form-row" *ngFor="let ticket of tickets">
+                <div class="form-group col-md-4">
+                    <label for="guid">Ticket #</label>
+                    <input type="text" disabled [(ngModel)]="ticket.guid" class="form-control" id="guid">
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="name">Name (gerne auch leer lassen)</label>
+                    <input type="text" [(ngModel)]="ticket.name" class="form-control" id="guid">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group col-md-3">
+                    <input type="text" class="form-control" [(ngModel)]="x" placeholder="x">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" (click)="addTickets()">Tickets hinzufügen</button>
+                    </div>
+                </div>
+                <div class="col-md-2 text-center">
+                    <h5>oder</h5>
+                </div>
+                <button id="save" class="btn btn-outline-success col-md-3" (click)="saveMany()">{{tickets.length}} neue Tickets speichern</button>
+            </div>
+        </div>
+        <div>
+            <div class="alert alert-info">
+                Das kommt mal in einer späteren Version!
+            </div>
+        </div>
+    </div>
+</ejs-tab>
