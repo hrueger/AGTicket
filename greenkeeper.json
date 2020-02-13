@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "AGTicket/package.json",
+        "api/package.json"
+      ]
+    }
+  }
+}
