@@ -30,7 +30,7 @@ import { ShortWhenPipe } from "./_pipes/short-when.pipe";
 import { TruncatePipe } from "./_pipes/truncate.pipe";
 import { AppComponent } from "./app.component";
 import { routes } from "./app.routes";
-import { GridModule, PageService, SortService, FilterService, GroupService, ResizeService, ToolbarService, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService, CommandColumnService } from '@syncfusion/ej2-angular-grids';
+import { GridModule, PageService, SortService, FilterService, GroupService, SearchService, AggregateService, EditService, ResizeService, ToolbarService, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService, CommandColumnService, SelectionService } from '@syncfusion/ej2-angular-grids';
 import { TicketsComponent } from "./_components/tickets/tickets.component";
 import { CreateTicketsComponent } from "./_components/createTickets/createTickets.component";
 
@@ -87,6 +87,12 @@ registerLocaleData(localeDe);
         ColumnChooserService,
         ColumnMenuService,
         CommandColumnService,
+        SelectionService,
+        FilterService,
+        SearchService,
+        EditService,
+        AggregateService,
+        GroupService,
         {
             provide: LOCALE_ID,
             useValue: "de-DE",
