@@ -46,17 +46,14 @@ export class UsersComponent implements OnInit {
             name: [this.name, [Validators.required]],
             password1: [this.password1, [Validators.required]],
             password2: [this.password2, [Validators.required]],
-            isAdmin: [this.isAdmin, [Validators.required]],
+            isAdmin: [this.isAdmin, []],
         });
         this.editUserForm = this.fb.group({
             editUserEmail: [this.editUserEmail, [Validators.required]],
             editUserName: [this.editUserName, [Validators.required]],
             editUserPassword1: [this.editUserPassword1, []],
             editUserPassword2: [this.editUserPassword2, []],
-            editUserPasswordOld: [
-                this.editUserPasswordOld,
-                [Validators.required],
-            ],
+            editUserPasswordOld: [this.editUserPasswordOld, [Validators.required]],
         });
 
         this.editUserForm

@@ -109,13 +109,10 @@
                 />
             </div>
             <br />
-            <div class="form-group">
-                <label for="isAdmin">{{'users.isAdmin' | translate}}: </label>
-                <select class="form-control" id="isAdmin" formControlName="isAdmin">
-                    <option value="Standard" selected>Standard</option>
-                    <option value="Super">Super</option>
-                </select>
-            </div>
+            <div class="form-group custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="isAdmin" id="isAdmin">
+                <label class="custom-control-label" for="isAdmin">{{'users.isAdmin' | translate}}</label>
+              </div>
             <br />
             <br />
         </form>

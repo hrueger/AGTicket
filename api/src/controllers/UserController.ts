@@ -5,21 +5,14 @@ import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 class UserController {
   public static listAll = async (req: Request, res: Response) => {
-    // Get users from database
     const userRepository = getRepository(User);
-    const users = await userRepository.find({
-      select: ["id", "username", "email"],
-    });
-
-    // Send the users object
+    const users = await userRepository.find();
     res.send(users);
   }
 
   public static newUser = async (req: Request, res: Response) => {
-    // Get parameters from the body
     const { username, pw, pw2, email, isAdmin } = req.body;
-
-    if (!(username && email && pw && pw2 && isAdmin)) {
+    if (!(username && email && pw && pw2)) {
       res.status(400).send({message: i18n.__("errors.notAllFieldsProvided")});
       return;
     }
@@ -32,14 +25,7 @@ class UserController {
     user.username = username;
     user.email = email;
     user.password = pw;
-    user.isAdmin = isAdmin;
-
-    // Validade if the parameters are ok
-    const errors = await validate(user);
-    if (errors.length > 0) {
-      res.status(400).send(errors);
-      return;
-    }
+    user.isAdmin = isAdmin ? true : false;
 
     user.hashPassword();
 
@@ -50,7 +36,6 @@ class UserController {
       res.status(409).send({message: i18n.__("errors.existingUsername")});
       return;
     }
-
     res.status(200).send({status: true});
   }
 
