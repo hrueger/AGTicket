@@ -5,12 +5,18 @@ import { UsersComponent } from "./_components/users/users.component";
 import { AuthGuard } from "./_guards/auth.guard";
 import { TicketsComponent } from "./_components/tickets/tickets.component";
 import { CreateTicketsComponent } from "./_components/createTickets/createTickets.component";
+import { ScanComponent } from "./_components/scan/scan.component";
 
 export const routes: Routes = [
     {
         canActivate: [AuthGuard],
         component: TicketsComponent,
         path: "tickets",
+    },
+    {
+        canActivate: [AuthGuard],
+        component: ScanComponent,
+        path: "scan",
     },
     {
         canActivate: [AuthGuard],

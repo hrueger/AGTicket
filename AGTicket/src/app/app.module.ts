@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { TabModule } from "@syncfusion/ej2-angular-navigations";
@@ -33,6 +34,7 @@ import { routes } from "./app.routes";
 import { GridModule, PageService, SortService, FilterService, GroupService, SearchService, AggregateService, EditService, ResizeService, ToolbarService, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService, CommandColumnService, SelectionService } from '@syncfusion/ej2-angular-grids';
 import { TicketsComponent } from "./_components/tickets/tickets.component";
 import { CreateTicketsComponent } from "./_components/createTickets/createTickets.component";
+import { ScanComponent } from "./_components/scan/scan.component";
 
 registerLocaleData(localeDe);
 
@@ -49,6 +51,7 @@ registerLocaleData(localeDe);
         TruncatePipe,
         HomeComponent,
         TicketsComponent,
+        ScanComponent,
         CreateTicketsComponent,
     ],
     imports: [
@@ -63,6 +66,7 @@ registerLocaleData(localeDe);
         ReactiveFormsModule,
         HttpClientModule,
         CommonModule,
+        ZXingScannerModule,
         NgbModalModule,
         FormsModule,
         ReactiveFormsModule,

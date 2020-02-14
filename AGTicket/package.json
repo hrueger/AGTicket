@@ -29,6 +29,7 @@
     "@syncfusion/ej2-angular-navigations": "^17.4.47",
     "@syncfusion/ej2-angular-popups": "^17.4.48",
     "@syncfusion/ej2-layouts": "^17.4.47",
+    "@zxing/ngx-scanner": "^3.0.0",
     "ajv": "^6.11.0",
     "bootstrap": "^4.4.1",
     "core-js": "^3.6.4",
