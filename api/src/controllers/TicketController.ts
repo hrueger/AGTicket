@@ -4,13 +4,28 @@ import * as i18n from "i18n";
 import { getRepository } from "typeorm";
 import { isArray } from "util";
 import { Ticket } from "../entity/Ticket";
-import { User } from "../entity/User";
+import * as QRCode from "qrcode";
+import * as PDFKit from "pdfkit";
 
 class TicketController {
   public static listAll = async (req: Request, res: Response) => {
     const ticketRepository = getRepository(Ticket);
     const tickets = await ticketRepository.find();
     res.send(tickets);
+  }
+
+  public static printAll = async (req: Request, res: Response) => {
+    const ticketRepository = getRepository(Ticket);
+    const tickets = await ticketRepository.find();
+    printTickets(tickets, res);
+  }
+
+  public static printSome = async (req: Request, res: Response) => {
+    const guids = req.body.tickets;
+    const ticketRepository = getRepository(Ticket);
+    let tickets = await ticketRepository.find();
+    tickets = tickets.filter((t) => guids.includes(t.guid));
+    printTickets(tickets, res);
   }
 
   public static newTickets = async (req: Request, res: Response) => {
@@ -72,3 +87,58 @@ class TicketController {
 }
 
 export default TicketController;
+
+async function printTickets(tickets: Ticket[], res) {
+  const margin = 15;
+  const contentMargin = 10;
+  const ticketsX = 2;
+  const ticketsY = 6;
+  const title = "Frühjahrsgala 2021";
+  const location = "Allgäu-Gymnasium Kempten";
+  const date = "70.13.2021";
+
+  const fullheight = 793;
+  const fullwidth = 611;
+  const qrSize = 70;
+  const pageHeight = fullheight - (2 * margin);
+  const pageWidth = fullwidth - (2 * margin);
+  const ticketWidth = (pageWidth - ((ticketsX - 1) * margin)) / ticketsX;
+  const ticketHeight = (pageHeight - ((ticketsY - 1) * margin)) / ticketsY;
+
+  const document = new PDFKit({margin, info: {Author: "AGTicket", CreationDate: new Date(), Creator: "AGTicket", Title: "Tickets"}});
+  document.pipe(res);
+  let x = 0;
+  let y = 0;
+  for (const ticket of tickets) {
+    const ticketStartX = (margin * (x + 1)) + (ticketWidth * x);
+    const ticketStartY = (margin * (y + 1)) + (ticketHeight * y);
+    const ticketContentStartX = ticketStartX + contentMargin;
+    const ticketContentStartY = ticketStartY + contentMargin;
+    document.fillColor("black");
+    document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
+    document.fontSize(20);
+    document.text(title, ticketContentStartX, ticketContentStartY);
+    document.fontSize(10);
+    document.text(ticket.name, ticketContentStartX, ticketContentStartY + 30);
+    document.text(location, ticketContentStartX, ticketContentStartY + 50);
+    document.text(date, ticketContentStartX, ticketContentStartY + 65);
+    document.fontSize(7);
+    document.fillColor("grey");
+    document.text(`Ticket #${ticket.guid}`, ticketContentStartX, ticketContentStartY + 90);
+    document.image(
+      await QRCode.toDataURL(ticket.guid, {margin: 1, width: qrSize}),
+      ticketContentStartX + ticketWidth - (contentMargin * 2) - qrSize,
+      ticketContentStartY + ticketHeight - (contentMargin * 2) - qrSize,
+    );
+    x++;
+    if (x >= ticketsX) {
+      x = 0;
+      y++;
+    }
+    if (y >= ticketsY) {
+      y = 0;
+      document.addPage();
+    }
+  }
+  document.end();
+}

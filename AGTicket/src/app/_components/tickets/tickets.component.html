@@ -2,11 +2,30 @@
     Keine Tickets gefunden!<br>
     <a routerLink="/createTickets">Tickets erstellen</a>
 </div>
-<ejs-grid #grid [dataSource]="tickets" [allowPaging]="true" [toolbar]="toolbar" [allowResizing]="true" [pageSettings]="pageSettings" [allowSorting]="true" [allowPdfExport]='true' (toolbarClick)='toolbarClick($event)'>
+<div class="mb-2 d-flex justify-content-between">
+    <div>
+        <button class="btn btn-outline-primary" (click)="toolbarClick('print')">Tabelle drucken</button>
+        <div ngbDropdown class="d-inline-block mr-2">
+            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Exportieren</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem (click)="toolbarClick('pdf')">als PDF</button>
+                <button ngbDropdownItem (click)="toolbarClick('excel')">als Excel</button>
+                <button ngbDropdownItem (click)="toolbarClick('csv')">als CSV</button>
+            </div>
+        </div>
+        <button class="btn btn-outline-success" (click)="toolbarClick('printTickets')">{{rowsSelected ? 'Ausgewählte' : 'Alle'}} Karten drucken ({{rowsSelected ? rowsSelected : tickets.length}}) <i *ngIf="printing" class="fa fa-spinner fa-spin"></i></button>
+    </div>
+    <form class="form-inline">
+        <input class="form-control" type="search" placeholder="Suchen" (input)="toolbarClick('search', $event)">
+    </form>
+</div>
+<ejs-grid #grid [dataSource]="tickets" [editSettings]="editSettings" [allowPaging]="true" [allowResizing]="true" [pageSettings]="pageSettings"
+    [allowSorting]="true" [allowPdfExport]="true" [allowExcelExport]="true" [selectionSettings]="selectionOptions">
     <e-columns>
-        <e-column field='Name' headerText='Order ID' textAlign='Right' width=120></e-column>
-        <e-column field='Nr' headerText='Customer ID' width=150></e-column>
-        <e-column field='Erstellt' headerText='Ship City' width=150></e-column>
-        <e-column field='Geändert' headerText='Ship Name' width=150></e-column>
+        <e-column type="checkbox" width="50"></e-column>
+        <e-column [allowEditing]= "false" field="guid" headerText="Order ID" textAlign="Right" width=120></e-column>
+        <e-column field="name" headerText="Customer ID" width=150></e-column>
+        <e-column field="createdAt" headerText="Ship City" width=150></e-column>
+        <e-column field="updatedAt" headerText="Ship Name" width=150></e-column>
     </e-columns>
 </ejs-grid>
