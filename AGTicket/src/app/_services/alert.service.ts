@@ -5,10 +5,10 @@ import { FastTranslateService } from "./fast-translate.service";
 @Injectable({ providedIn: "root" })
 export class AlertService {
   private readonly timeouts = {
-    error: 999999,
-    info: 20000,
-    success: 5000,
-    warning: 999999,
+    error: 3000,
+    info: 3000,
+    success: 3000,
+    warning: 3000,
   };
   constructor(private toastr: ToastrService, private fts: FastTranslateService) {
   }
