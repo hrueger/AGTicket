@@ -28,5 +28,5 @@ import { User } from "./User";
     public updatedAt: Date;
 
     @Column()
-    public active: boolean;
+    public activated: boolean;
   }

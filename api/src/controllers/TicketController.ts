@@ -20,6 +20,19 @@ class TicketController {
     printTickets(tickets, res);
   }
 
+  public static activateTicket = async (req: Request, res: Response) => {
+    const ticketRepository = getRepository(Ticket);
+    try {
+      const ticket = await ticketRepository.findOne({where: {guid: req.params.guid}});
+      ticket.activated = true;
+      ticketRepository.save(ticket);
+    } catch (err) {
+      res.status(500).send({message: err});
+      return;
+    }
+    res.send({status: true});
+  }
+
   public static printSome = async (req: Request, res: Response) => {
     const guids = req.body.tickets;
     const ticketRepository = getRepository(Ticket);
@@ -37,7 +50,7 @@ class TicketController {
     }
     tickets = tickets.map((t) => {
       return {
-        active: true,
+        activated: false,
         guid: t.guid,
         name: t.name,
       };
