@@ -24,6 +24,10 @@ class TicketController {
     const ticketRepository = getRepository(Ticket);
     try {
       const ticket = await ticketRepository.findOne({where: {guid: req.params.guid}});
+      if (ticket.activated == true) {
+        res.send({status: "Das Ticket ist schon aktiviert!"});
+        return;
+      }
       ticket.activated = true;
       ticketRepository.save(ticket);
     } catch (err) {
