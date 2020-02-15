@@ -13,7 +13,8 @@
                 <button ngbDropdownItem (click)="toolbarClick('csv')">als CSV</button>
             </div>
         </div>
-        <button class="btn btn-outline-success" (click)="toolbarClick('printTickets')">{{rowsSelected ? 'Ausgewählte' : 'Alle'}} Karten drucken ({{rowsSelected ? rowsSelected : tickets.length}}) <i *ngIf="printing" class="fa fa-spinner fa-spin"></i></button>
+        <button class="btn btn-outline-success mr-2" (click)="toolbarClick('printTickets')">{{rowsSelected ? 'Ausgewählte' : 'Alle'}} Karten drucken ({{rowsSelected ? rowsSelected : tickets.length}}) <i *ngIf="printing" class="fa fa-spinner fa-spin"></i></button>
+        <button class="btn btn-outline-danger" (click)="toolbarClick('deleteTickets')" *ngIf="rowsSelected">Ausgewählte Karten löschen ({{rowsSelected}}) <i *ngIf="deleting" class="fa fa-spinner fa-spin"></i></button>
     </div>
     <form class="form-inline">
         <input class="form-control" type="search" placeholder="Suchen" (input)="toolbarClick('search', $event)">

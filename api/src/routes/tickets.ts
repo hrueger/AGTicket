@@ -9,7 +9,7 @@ router.get("/print", [checkJwt], TicketController.printAll);
 router.post("/print", [checkJwt], TicketController.printSome);
 router.post("/", [checkJwt], TicketController.newTickets);
 router.post("/:guid/activate", [checkJwt], TicketController.activateTicket);
-// router.post("/:id([0-9]+)", [checkJwt], TicketController.seenTicket);
+router.post("/delete", [checkJwt], TicketController.deleteTickets);
 // router.delete("/:id([0-9]+)", [checkJwt], TicketController.deleteTicket);
 
 export default router;

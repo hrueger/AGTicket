@@ -3,6 +3,7 @@ import { RemoteService } from "../../_services/remote.service";
 import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel } from "@syncfusion/ej2-angular-grids";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
+import { AlertService } from "../../_services/alert.service";
 
 @Component({
     selector: "app-tickets",
@@ -17,8 +18,9 @@ export class TicketsComponent {
     @ViewChild("grid") public grid: GridComponent;
     public rowsSelected: number = 0;
     public printing: boolean = false;
+    deleting: boolean;
 
-    constructor(private remoteService: RemoteService, private httpClient: HttpClient) {}
+    constructor(private remoteService: RemoteService, private httpClient: HttpClient, private alertService: AlertService) {}
 
     public ngOnInit() {
         this.remoteService.get("get", "tickets").subscribe((res) => {
@@ -64,6 +66,18 @@ export class TicketsComponent {
             } else {
                 this.httpClient.get(`${environment.apiUrl}tickets/print`, {responseType: "blob"}).subscribe((data) => {
                     this.openPDF(data);
+                });
+            }
+        } else if (action === "deleteTickets") {
+            this.deleting = true;
+            if (this.rowsSelected) {
+                const guids = this.grid.getSelectedRecords().map((t: any) => t.guid);
+                this.remoteService.get("post", `tickets/delete`, {tickets: guids}).subscribe((res) => {
+                    if (res && res.status) {
+                        this.deleting = false;
+                        this.tickets = this.tickets.filter((t) => !guids.includes(t.guid));
+                        this.alertService.success("Tickets erfolgreich gelöscht!");
+                    }
                 });
             }
         } else {

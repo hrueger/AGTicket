@@ -70,35 +70,24 @@ class TicketController {
     res.status(200).send({status: true});
   }
 
-  public static seenTicket = async (req: Request, res: Response) => {
-    const id = req.params.id;
-    return;
+  public static deleteTickets = async (req: Request, res: Response) => {
+    const ids = req.body.tickets;
+    if (!isArray(ids)) {
+      res.status(400).send({message: i18n.__("errors.notAllFieldsProvided")});
+      return;
+    }
     const ticketRepository = getRepository(Ticket);
-    let ticket: Ticket;
+    const tickets = await ticketRepository.find();
     try {
-      ticket = await ticketRepository.findOneOrFail(id);
+      for (const ticket of tickets) {
+        if (ids.includes(ticket.guid)) {
+          await ticketRepository.remove(ticket);
+        }
+      }
     } catch (error) {
       res.status(404).send({message: i18n.__("errors.ticketNotFound")});
       return;
     }
-    ticketRepository.delete(id);
-
-    res.status(200).send({status: true});
-  }
-
-  public static deleteTicket = async (req: Request, res: Response) => {
-    const id = req.params.id;
-
-    const ticketRepository = getRepository(Ticket);
-    let ticket: Ticket;
-    try {
-      ticket = await ticketRepository.findOneOrFail(id);
-    } catch (error) {
-      res.status(404).send({message: i18n.__("errors.ticketNotFound")});
-      return;
-    }
-    ticketRepository.delete(id);
-
     res.status(200).send({status: true});
   }
 }
