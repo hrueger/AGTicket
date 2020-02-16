@@ -5,7 +5,9 @@ import { getRepository } from "typeorm";
 import { isArray } from "util";
 import { Ticket } from "../entity/Ticket";
 import * as QRCode from "qrcode";
+import * as bwip from "bwip-js";
 import * as PDFKit from "pdfkit";
+import { getConfig } from "../utils/utils";
 
 class TicketController {
   public static listAll = async (req: Request, res: Response) => {
@@ -95,31 +97,35 @@ class TicketController {
 export default TicketController;
 
 async function printTickets(tickets: Ticket[], res) {
-  const margin = 15;
-  const contentMargin = 10;
-  const ticketsX = 2;
-  const ticketsY = 6;
-  const title = "Frühjahrsgala 2021";
-  const location = "Allgäu-Gymnasium Kempten";
-  const date = "70.13.2021";
+
+  const config = await getConfig();
+
+  const ticketSpacing = parseInt(config.ticketSpacing, undefined);
+  const contentSpacing = parseInt(config.contentSpacing, undefined);
+  const ticketsX = parseInt(config.ticketsX, undefined);
+  const ticketsY = parseInt(config.ticketsY, undefined);
+  const title = config.title;
+  const location = config.location;
+  const date = config.date;
 
   const fullheight = 793;
   const fullwidth = 611;
   const qrSize = 70;
-  const pageHeight = fullheight - (2 * margin);
-  const pageWidth = fullwidth - (2 * margin);
-  const ticketWidth = (pageWidth - ((ticketsX - 1) * margin)) / ticketsX;
-  const ticketHeight = (pageHeight - ((ticketsY - 1) * margin)) / ticketsY;
+  const barcodeSize = 30;
+  const pageHeight = fullheight - (2 * ticketSpacing);
+  const pageWidth = fullwidth - (2 * ticketSpacing);
+  const ticketWidth = (pageWidth - ((ticketsX - 1) * ticketSpacing)) / ticketsX;
+  const ticketHeight = (pageHeight - ((ticketsY - 1) * ticketSpacing)) / ticketsY;
 
-  const document = new PDFKit({margin, info: {Author: "AGTicket", CreationDate: new Date(), Creator: "AGTicket", Title: "Tickets"}});
+  const document = new PDFKit({margin: ticketSpacing, info: {Author: "AGTicket", CreationDate: new Date(), Creator: "AGTicket", Title: "Tickets"}});
   document.pipe(res);
   let x = 0;
   let y = 0;
   for (const ticket of tickets) {
-    const ticketStartX = (margin * (x + 1)) + (ticketWidth * x);
-    const ticketStartY = (margin * (y + 1)) + (ticketHeight * y);
-    const ticketContentStartX = ticketStartX + contentMargin;
-    const ticketContentStartY = ticketStartY + contentMargin;
+    const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
+    const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
+    const ticketContentStartX = ticketStartX + contentSpacing;
+    const ticketContentStartY = ticketStartY + contentSpacing;
     document.fillColor("black");
     document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
     document.fontSize(20);
@@ -131,11 +137,31 @@ async function printTickets(tickets: Ticket[], res) {
     document.fontSize(7);
     document.fillColor("grey");
     document.text(`Ticket #${ticket.guid}`, ticketContentStartX, ticketContentStartY + 90);
-    document.image(
-      await QRCode.toDataURL(ticket.guid, {margin: 1, width: qrSize}),
-      ticketContentStartX + ticketWidth - (contentMargin * 2) - qrSize,
-      ticketContentStartY + ticketHeight - (contentMargin * 2) - qrSize,
-    );
+    if (config.codeType == "qr" || config.idType == "guid") {
+      document.image(
+        await QRCode.toDataURL(ticket.guid, {margin: 1, width: qrSize}),
+        ticketContentStartX + ticketWidth - (contentSpacing * 2) - qrSize,
+        ticketContentStartY + ticketHeight - (contentSpacing * 2) - qrSize,
+      );
+    } else {
+      document.image(
+        await new Promise((resolve, reject) => {
+          bwip.toBuffer({text: ticket.guid, rotate: "L", bcid: "code128"}, (err, png) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(`data:image/png;base64, ${png.toString("base64")}`);
+            }
+          });
+        }),
+        ticketContentStartX + ticketWidth - (contentSpacing * 2) - barcodeSize,
+        ticketContentStartY,
+        {
+          width: barcodeSize,
+          height: ticketHeight - (contentSpacing * 2),
+        },
+      );
+    }
     x++;
     if (x >= ticketsX) {
       x = 0;

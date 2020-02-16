@@ -6,6 +6,7 @@ import { AuthGuard } from "./_guards/auth.guard";
 import { TicketsComponent } from "./_components/tickets/tickets.component";
 import { CreateTicketsComponent } from "./_components/createTickets/createTickets.component";
 import { ScanComponent } from "./_components/scan/scan.component";
+import { ConfigComponent } from "./_components/config/config.component";
 
 export const routes: Routes = [
     {
@@ -22,6 +23,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         component: CreateTicketsComponent,
         path: "createTickets",
+    },
+    {
+        canActivate: [AuthGuard],
+        component: ConfigComponent,
+        path: "config",
     },
     {
         canActivate: [AuthGuard],

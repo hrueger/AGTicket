@@ -19,6 +19,7 @@
    },
    "homepage": "https://github.com/hrueger/AGTicket#readme",
    "devDependencies": {
+      "@types/bwip-js": "^1.7.0",
       "@types/email-templates": "^6.0.2",
       "@types/i18n": "^0.8.6",
       "@types/node": "^13.1.8",
@@ -39,6 +40,7 @@
       "@types/jsonwebtoken": "^8.3.6",
       "bcryptjs": "^2.4.3",
       "body-parser": "^1.19.0",
+      "bwip-js": "^2.0.6",
       "class-validator": "^0.11.0",
       "cors": "^2.8.5",
       "ejs": "^3.0.1",

@@ -35,6 +35,7 @@ import { GridModule, PageService, SortService, FilterService, GroupService, Sear
 import { TicketsComponent } from "./_components/tickets/tickets.component";
 import { CreateTicketsComponent } from "./_components/createTickets/createTickets.component";
 import { ScanComponent } from "./_components/scan/scan.component";
+import { ConfigComponent } from "./_components/config/config.component";
 
 registerLocaleData(localeDe);
 
@@ -53,6 +54,7 @@ registerLocaleData(localeDe);
         TicketsComponent,
         ScanComponent,
         CreateTicketsComponent,
+        ConfigComponent,
     ],
     imports: [
         UiSwitchModule.forRoot({}),

@@ -13,6 +13,8 @@ import { User } from "./entity/User";
 import { createAdminUser1574018391679 } from "./migration/1574018391679-createAdminUser";
 import routes from "./routes";
 import { toInt } from "./utils/utils";
+import { createConfig1041039482032 } from "./migration/1041039482032-createConfig";
+import { Config } from "./entity/Config";
 
 i18n.configure({
   // tslint:disable-next-line: no-bitwise
@@ -33,10 +35,11 @@ createConnection({
   entities: [
     User,
     Ticket,
+    Config,
   ],
   host: config.database_host,
   logging: false,
-  migrations: [createAdminUser1574018391679],
+  migrations: [createAdminUser1574018391679, createConfig1041039482032],
   migrationsRun: true,
   password: config.database_password,
   port: toInt(config.database_port),
