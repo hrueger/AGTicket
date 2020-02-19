@@ -13,9 +13,8 @@
 ## What is it?
 A complete solution for event ticketing.
 
-More info will follow soon.
-
-
+## Roadmap
+ToDo
 
 ## I want to contribute
 1. Clone this repository by typing `git clone https://github.com/hrueger/AGTicket` in your command prompt
