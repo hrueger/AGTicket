@@ -10,7 +10,7 @@
 
 > *Warning!* AGTicket is still in development and can't be used as of now.
 
-## What is it?s
+## What is it?
 A complete solution for event ticketing.
 
 More info will follow soon.
