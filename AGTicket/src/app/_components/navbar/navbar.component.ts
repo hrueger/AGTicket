@@ -13,6 +13,7 @@ import { AuthenticationService } from "../../_services/authentication.service";
 })
 export class NavbarComponent {
     public headline: string = "";
+    public showMenu: boolean = false;
     @Output() public toggleNav = new EventEmitter<any>();
 
     constructor(

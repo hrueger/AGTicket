@@ -13,7 +13,6 @@ export class AppComponent {
     public currentUser: any;
     public pushMessage: any;
     public showNav: boolean = false;
-    public navToHide: boolean = false;
     public isShare: boolean;
     public showEverything: boolean = true;
     constructor(
@@ -59,8 +58,5 @@ export class AppComponent {
                 this.showEverything = true;
             }, 0);
         });
-    }
-    public hideNav() {
-        this.navToHide = !this.navToHide;
     }
 }
