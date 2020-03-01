@@ -1,8 +1,7 @@
-<form [formGroup]="loginForm" class="form-signin" (ngSubmit)="onSubmit()" *ngIf="!resetPassword && !inputNewPassword">
+<form [formGroup]="loginForm" class="form-signin mt-4 border border-primary" (ngSubmit)="onSubmit()" *ngIf="!resetPassword && !inputNewPassword">
     <div class="text-center mb-4">
-        <img class="mb-4" src="https://www.netclipart.com/pp/m/147-1474567_movie-ticket-png-ticket.png" alt="Logo" height="72">
+        <img src="assets/logo/AGTicket.png" alt="Logo" height="120">
         <h1 class="h3 mb-3 font-weight-normal">AGTicket</h1>
-        <p>Please login (more info will be here later):</p>
     </div>
     <div class="form-label-group">
         <input [placeholder]="'general.username' | translate" type="text" formControlName="username" class="form-control" [ngClass]="{'is-invalid': submitted && f.username.errors}" required autofocus id="inputUsername" />
