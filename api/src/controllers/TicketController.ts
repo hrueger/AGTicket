@@ -39,6 +39,24 @@ class TicketController {
     res.send({status: true});
   }
 
+  public static editTicket = async (req: Request, res: Response) => {
+    const ticketRepository = getRepository(Ticket);
+    const {name} = req.body;
+    if (!name) {
+      res.status(400).send(i18n.__("errors.notAllFieldsProvided"));
+      return;
+    }
+    try {
+      const ticket = await ticketRepository.findOne({where: {guid: req.params.guid}});
+      ticket.name = name;
+      ticketRepository.save(ticket);
+    } catch (err) {
+      res.status(500).send({message: err});
+      return;
+    }
+    res.send({status: true});
+  }
+
   public static printSome = async (req: Request, res: Response) => {
     const guids = req.body.tickets;
     const ticketRepository = getRepository(Ticket);

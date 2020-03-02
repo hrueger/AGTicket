@@ -104,7 +104,7 @@ export class TicketsComponent {
         }
     }
 
-    public actionComplete(args: SaveEventArgs) {
+    public actionComplete(args) {
         if (args.requestType === "save") {
             for (const cols of (this.grid.columns as Column[])) {
                 if (cols.field === "createdAt") {
@@ -113,7 +113,11 @@ export class TicketsComponent {
                     cols.visible = true;
                 }
             }
-            // save args.data
+            this.remoteService.getNoCache("post", `/tickets/${args.data.guid}`, {name: args.data.name}).subscribe(async (data) => {
+                if (data && data.status) {
+                    this.alertService.success(await this.fts.t("general.ticketUpdatedSuccessfully"));
+                }
+            });
         }
     }
 

@@ -8,6 +8,7 @@ router.get("/", [checkJwt], TicketController.listAll);
 router.get("/print", [checkJwt], TicketController.printAll);
 router.post("/print", [checkJwt], TicketController.printSome);
 router.post("/", [checkJwt], TicketController.newTickets);
+router.post("/:guid", [checkJwt], TicketController.editTicket);
 router.post("/:guid/activate", [checkJwt], TicketController.activateTicket);
 router.post("/delete", [checkJwt], TicketController.deleteTickets);
 // router.delete("/:id([0-9]+)", [checkJwt], TicketController.deleteTicket);

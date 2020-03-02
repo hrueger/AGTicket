@@ -37,6 +37,12 @@
     "back": "Zurück",
     "barcode": "Barcode",
     "canBeEmpty": "gerne auch leer lassen",
+    "colors": {
+      "error": "Fehler",
+      "info": "Information",
+      "success": "Erfolg",
+      "warning": "Warnung"
+    },
     "createTickets": "Tickets erstellen",
     "created": "Erstellt",
     "delete": "Löschen",
@@ -64,6 +70,7 @@
     "scan": "Scannen",
     "search": "Suchen",
     "showDetails": "Details anzeigen",
+    "ticketUpdatedSuccessfully": "Ticket erfolgreich aktualisiert!",
     "tickets": "Tickets",
     "update": "Aktualisieren",
     "updated": "Aktualisiert",
