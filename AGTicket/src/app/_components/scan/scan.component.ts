@@ -22,22 +22,18 @@ export class ScanComponent {
     }
     public scanSuccessHandler(data: string) {
         if (!this.checking && !this.ticketsDone.includes(data)) {
-            if (new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i).test(data)) {
-                this.checking = true;
-                this.remoteService.getNoCache("post", `tickets/${data}/activate`).subscribe((res) => {
-                    if (res) {
-                        if (res.status === true) {
-                            this.alertService.success("Ticket erfolgreich deaktivert!");
-                        } else {
-                            this.alertService.error(res.status);
-                        }
+            this.checking = true;
+            this.remoteService.getNoCache("post", `tickets/${data}/activate`).subscribe((res) => {
+                if (res) {
+                    if (res.status === true) {
+                        this.alertService.success("Ticket erfolgreich deaktivert!");
+                    } else {
+                        this.alertService.error(res.status);
                     }
-                    this.checking = false;
-                    this.ticketsDone.push(data);
-                });
-            } else {
-                this.alertService.error("not valid");
-            }
+                }
+                this.checking = false;
+                this.ticketsDone.push(data);
+            });
         }
     }
     public scanErrorHandler(event) {
