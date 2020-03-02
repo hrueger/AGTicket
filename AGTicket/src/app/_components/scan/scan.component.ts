@@ -2,6 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { ZXingScannerComponent } from "@zxing/ngx-scanner"
 import { AlertService } from "../../_services/alert.service";
 import { RemoteService } from "../../_services/remote.service";
+import { FastTranslateService } from "../../_services/fast-translate.service";
 
 @Component({
     selector: "app-scan",
@@ -12,10 +13,10 @@ export class ScanComponent {
     @ViewChild("scanner") public scanner: ZXingScannerComponent;
     private checking: boolean = false;
     private ticketsDone: string[] = [];
-    constructor(private alertService: AlertService, private remoteService: RemoteService) {}
+    constructor(private alertService: AlertService, private remoteService: RemoteService, private fts: FastTranslateService) {}
 
-    public camerasFoundHandler(event) {
-        this.alertService.info("Kameras wurden gefunden, bitte die Berechtigngsanfrage akzeptieren!");
+    public async camerasFoundHandler(event) {
+        this.alertService.info(await this.fts.t("general.camerasFound"));
     }
     public camerasNotFoundHandler(event) {
         this.alertService.error(event.toString());
@@ -23,10 +24,10 @@ export class ScanComponent {
     public scanSuccessHandler(data: string) {
         if (!this.checking && !this.ticketsDone.includes(data)) {
             this.checking = true;
-            this.remoteService.getNoCache("post", `tickets/${data}/activate`).subscribe((res) => {
+            this.remoteService.getNoCache("post", `tickets/${data}/activate`).subscribe(async (res) => {
                 if (res) {
                     if (res.status === true) {
-                        this.alertService.success("Ticket erfolgreich deaktivert!");
+                        this.alertService.success(await this.fts.t("general.ticketActivatedSuccessfully"));
                     } else {
                         this.alertService.error(res.status);
                     }

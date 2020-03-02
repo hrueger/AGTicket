@@ -1,6 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
-import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column, SaveEventArgs, EditEventArgs } from "@syncfusion/ej2-angular-grids";
+import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column, SaveEventArgs, EditEventArgs, DialogEdit } from "@syncfusion/ej2-angular-grids";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { AlertService } from "../../_services/alert.service";
@@ -43,6 +43,7 @@ export class TicketsComponent {
         this.translations.number = await this.fts.t("general.number");
         this.translations.name = await this.fts.t("general.name");
         this.translations.activated = await this.fts.t("general.activated");
+        this.translations.editTicket = await this.fts.t("general.editTicket");
         setTimeout(() => {
             this.grid.rowDeselected.subscribe(() => {
                 this.rowsSelected = this.grid.getSelectedRows().length;
@@ -99,6 +100,8 @@ export class TicketsComponent {
                     cols.visible = false;
                 } else if (cols.field === "updatedAt") {
                     cols.visible = false;
+                } else if (cols.field === "activated") {
+                    cols.visible = false;
                 }
             }
         }
@@ -111,6 +114,8 @@ export class TicketsComponent {
                     cols.visible = true;
                 } else if (cols.field === "updatedAt") {
                     cols.visible = true;
+                } else if (cols.field === "activated") {
+                    cols.visible = true;
                 }
             }
             this.remoteService.getNoCache("post", `/tickets/${args.data.guid}`, {name: args.data.name}).subscribe(async (data) => {
@@ -118,6 +123,9 @@ export class TicketsComponent {
                     this.alertService.success(await this.fts.t("general.ticketUpdatedSuccessfully"));
                 }
             });
+        } else if (args.requestType === "beginEdit") {
+            args.dialog.header = this.translations.editTicket;
+            // args.dialog.
         }
     }
 

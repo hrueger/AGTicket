@@ -36,6 +36,7 @@
     "addTickets": "Add tickets",
     "back": "Back",
     "barcode": "Barcode",
+    "camerasFound": "Cameras were found, please grant the permission to access them!",
     "canBeEmpty": "can be empty",
     "colors": {
       "error": "Error",
@@ -47,6 +48,7 @@
     "created": "Created",
     "delete": "Delete",
     "deleteSelectedTickets": "Delete selected tickets",
+    "editTicket": "Edit ticket",
     "email": "Email",
     "error": "Error",
     "eventConfig": "Event config",
@@ -70,6 +72,7 @@
     "scan": "Scan",
     "search": "Search",
     "showDetails": "Show details",
+    "ticketActivatedSuccessfully": "Ticket activated successfully!",
     "ticketUpdatedSuccessfully": "Ticket updated successfully!",
     "tickets": "Tickets",
     "update": "Update",

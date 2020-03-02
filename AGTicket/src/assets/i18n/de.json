@@ -36,6 +36,7 @@
     "addTickets": "Tickets hinzufügen",
     "back": "Zurück",
     "barcode": "Barcode",
+    "camerasFound": "Kameras wurden gefunden, bitte die Berechtigngsanfrage akzeptieren!",
     "canBeEmpty": "gerne auch leer lassen",
     "colors": {
       "error": "Fehler",
@@ -47,6 +48,7 @@
     "created": "Erstellt",
     "delete": "Löschen",
     "deleteSelectedTickets": "Ausgewählte Karten löschen",
+    "editTicket": "Ticket bearbeiten",
     "email": "Email",
     "error": "Fehler",
     "eventConfig": "Event Konfiguration",
@@ -70,6 +72,7 @@
     "scan": "Scannen",
     "search": "Suchen",
     "showDetails": "Details anzeigen",
+    "ticketActivatedSuccessfully": "Ticket erfolgreich deaktivert!",
     "ticketUpdatedSuccessfully": "Ticket erfolgreich aktualisiert!",
     "tickets": "Tickets",
     "update": "Aktualisieren",
