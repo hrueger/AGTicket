@@ -1,41 +1,41 @@
 <ejs-tab id="element">
     <div class="e-tab-header">
         <div>
-            Einzelnes Ticket
+            {{'create.single' | translate}}
         </div>
         <div>
-            Mehrere Tickets
+            {{'create.multiple' | translate}}
         </div>
         <div>
-            CSV importieren
+            {{'create.importCSV' | translate}}
         </div>
     </div>
     <div class="e-content">
         <div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="guid">Nr</label>
+                    <label for="guid">{{'general.number' | translate}}</label>
                     <input type="text" disabled [(ngModel)]="guid" class="form-control" id="guid">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">Name (gerne auch leer lassen)</label>
+                    <label for="name">{{'general.name' | translate}} ({{'general.canBeEmpty' | translate}})</label>
                     <input type="text" [(ngModel)]="name" class="form-control" id="guid">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="save">Speichern</label>
+                    <label for="save">{{'general.save' | translate}}</label>
                     <button id="save" class="form-control btn btn-outline-success"
-                        (click)="saveOne()">Speichern</button>
+                        (click)="saveOne()">{{'general.save' | translate}}</button>
                 </div>
             </div>
         </div>
         <div>
             <div class="form-row" *ngFor="let ticket of tickets">
                 <div class="form-group col-md-4">
-                    <label for="guid">Ticket #</label>
+                    <label for="guid">{{'general.number' | translate}}</label>
                     <input type="text" disabled [(ngModel)]="ticket.guid" class="form-control" id="guid">
                 </div>
                 <div class="form-group col-md-8">
-                    <label for="name">Name (gerne auch leer lassen)</label>
+                    <label for="name">{{'general.name' | translate}} ({{'general.canBeEmpty' | translate}})</label>
                     <input type="text" [(ngModel)]="ticket.name" class="form-control" id="guid">
                 </div>
             </div>
@@ -43,18 +43,18 @@
                 <div class="input-group col-md-3">
                     <input type="text" class="form-control" [(ngModel)]="x" placeholder="x">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" (click)="addTickets()">Tickets hinzufügen</button>
+                        <button class="btn btn-outline-secondary" type="button" (click)="addTickets()">{{'general.addTickets' | translate}}</button>
                     </div>
                 </div>
                 <div class="col-md-2 text-center">
-                    <h5>oder</h5>
+                    <h5>{{'general.or' | translate}}</h5>
                 </div>
-                <button id="save" class="btn btn-outline-success col-md-3" (click)="saveMany()">{{tickets.length}} neue Tickets speichern</button>
+                <button id="save" class="btn btn-outline-success col-md-3" (click)="saveMany()">{{'general.saveNewTickets' | translate:{x: tickets.length} }}</button>
             </div>
         </div>
         <div>
             <div class="alert alert-info">
-                Das kommt mal in einer späteren Version!
+                {{'errors.avalibleInLaterVersion' | translate}}
             </div>
         </div>
     </div>

@@ -1,92 +1,92 @@
 <form [formGroup]="configForm" [class.was-validated]="canValidate">
     <div class="form-row">
         <div class="col-md-6 mb-3">
-            <label for="title">Title</label>
+            <label for="title">{{'config.title' | translate}}</label>
             <input type="text" class="form-control" formControlName="title" id="title" required>
             <div class="invalid-feedback">
-                Please provide a valid title.
+                {{'errors.validTitle' | translate}}
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="validationCustom05">Location</label>
+            <label for="validationCustom05">{{'config.location' | translate}}</label>
             <input type="text" class="form-control" id="location" formControlName="location" required>
             <div class="invalid-feedback">
-                Please provide a valid location.
+                {{'errors.validLocation' | translate}}
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="validationCustom05">Date</label>
+            <label for="validationCustom05">{{'config.date' | translate}}</label>
             <input type="text" class="form-control" id="date" formControlName="date" required>
             <div class="invalid-feedback">
-                Please provide a valid date.
+                {{'errors.validDate' | translate}}
             </div>
         </div>
     </div>
     <div class="form-row">
 
         <div class="col-md-3 mb-3">
-            <label for="ticketsX">Tickets X</label>
+            <label for="ticketsX">{{'config.ticketsX' | translate}}</label>
             <input type="number" class="form-control" id="ticketsX" min="1" max="10" formControlName="ticketsX"
                 required>
             <div class="invalid-feedback">
-                Please select a valid number between 1 and 10.
+                {{'errors.numberBetween1and10' | translate}}
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="ticketsY">Tickets Y</label>
+            <label for="ticketsY">{{'config.ticketsY' | translate}}</label>
             <input type="number" class="form-control" id="ticketsY" min="1" max="20" formControlName="ticketsY"
                 required>
             <div class="invalid-feedback">
-                Please select a valid number between 1 and 20.
+                {{'errors.numberBetween1and10' | translate}}
             </div>
         </div>
 
         <div class="col-md-3 mb-3">
-            <label for="ticketSpacing">Ticket spacing</label>
+            <label for="ticketSpacing">{{'config.ticketSpacing' | translate}}</label>
             <input type="number" class="form-control" id="ticketSpacing" min="0" max="50"
                 formControlName="ticketSpacing" required>
             <div class="invalid-feedback">
-                Please select a valid number between 0 and 50.
+                {{'errors.numberBetween0and50' | translate}}
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="contentSpacing">Content spacing</label>
+            <label for="contentSpacing">{{'config.contentSpacing' | translate}}</label>
             <input type="number" class="form-control" id="contentSpacing" min="0" max="50"
                 formControlName="contentSpacing" required>
             <div class="invalid-feedback">
-                Please select a valid number between 0 and 50.
+                {{'errors.numberBetween0and50' | translate}}
             </div>
         </div>
     </div>
     <div class="form-row">
         <div class="col-md-3 mb-3">
-            <label for="codeType">Code Type</label>
+            <label for="codeType">{{'config.codeType' | translate}}</label>
             <select class="custom-select" id="codeType" formControlName="codeType" required>
-                <option value="qr">QR Code</option>
-                <option value="bar">Barcode</option>
+                <option value="qr">{{'general.qrCode' | translate}}</option>
+                <option value="bar">{{'general.barcode' | translate}}</option>
             </select>
             <div class="invalid-feedback">
-                Please select a valid code type.
+                {{'errors.validCodeType' | translate}}
             </div>
         </div>
 
         <div class="col-md-3 mb-3">
-            <label for="idType">ID Type</label>
+            <label for="idType">{{'config.idType' | translate}}</label>
             <select class="custom-select" id="idType" formControlName="idType" required>
-                <option value="guid">GUID</option>
-                <option value="numbers">Numbers</option>
-                <option value="letters">Letters</option>
+                <option value="guid">{{'general.guid' | translate}}</option>
+                <option value="numbers">{{'general.numbers' | translate}}</option>
+                <option value="letters">{{'general.letters' | translate}}</option>
             </select>
             <div class="invalid-feedback">
-                Please select a valid id type.
+                {{'errors.validIdType' | translate}}
             </div>
         </div>
     </div>
-    <button class="btn btn-outline-success" (click)="save()">Speichern</button>
+    <button class="btn btn-outline-success" (click)="save()">{{'general.save' | translate}}</button>
 </form>
 
 <div class="card mt-5" *ngIf="updates && updates.updatesAvalible">
-    <div class="card-header">Updates</div>
+    <div class="card-header">{{'general.updates' | translate}}</div>
     <div class="card-body">
         <div class="alert alert-warning">
             {{updates.updateCount}} {{"general.updatesAvalible" | translate}}<br>
