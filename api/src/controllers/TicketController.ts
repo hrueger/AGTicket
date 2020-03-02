@@ -42,7 +42,7 @@ class TicketController {
   public static editTicket = async (req: Request, res: Response) => {
     const ticketRepository = getRepository(Ticket);
     const {name} = req.body;
-    if (!name) {
+    if (name == undefined) {
       res.status(400).send(i18n.__("errors.notAllFieldsProvided"));
       return;
     }
