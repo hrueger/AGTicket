@@ -26,14 +26,16 @@
 
         <div class="col-md-3 mb-3">
             <label for="ticketsX">Tickets X</label>
-            <input type="number" class="form-control" id="ticketsX" min="1" max="10" formControlName="ticketsX" required>
+            <input type="number" class="form-control" id="ticketsX" min="1" max="10" formControlName="ticketsX"
+                required>
             <div class="invalid-feedback">
                 Please select a valid number between 1 and 10.
             </div>
         </div>
         <div class="col-md-3 mb-3">
             <label for="ticketsY">Tickets Y</label>
-            <input type="number" class="form-control" id="ticketsY" min="1" max="20" formControlName="ticketsY" required>
+            <input type="number" class="form-control" id="ticketsY" min="1" max="20" formControlName="ticketsY"
+                required>
             <div class="invalid-feedback">
                 Please select a valid number between 1 and 20.
             </div>
@@ -41,14 +43,16 @@
 
         <div class="col-md-3 mb-3">
             <label for="ticketSpacing">Ticket spacing</label>
-            <input type="number" class="form-control" id="ticketSpacing" min="0" max="50" formControlName="ticketSpacing" required>
+            <input type="number" class="form-control" id="ticketSpacing" min="0" max="50"
+                formControlName="ticketSpacing" required>
             <div class="invalid-feedback">
                 Please select a valid number between 0 and 50.
             </div>
         </div>
         <div class="col-md-3 mb-3">
             <label for="contentSpacing">Content spacing</label>
-            <input type="number" class="form-control" id="contentSpacing" min="0" max="50" formControlName="contentSpacing" required>
+            <input type="number" class="form-control" id="contentSpacing" min="0" max="50"
+                formControlName="contentSpacing" required>
             <div class="invalid-feedback">
                 Please select a valid number between 0 and 50.
             </div>
@@ -80,3 +84,19 @@
     </div>
     <button class="btn btn-outline-success" (click)="save()">Speichern</button>
 </form>
+
+<div class="card mt-5" *ngIf="updates && updates.updatesAvalible">
+    <div class="card-header">Updates</div>
+    <div class="card-body">
+        <div class="alert alert-warning">
+            {{updates.updateCount}} {{"general.updatesAvalible" | translate}}<br>
+            <button class="btn btn-link pl-0 d-block"
+                (click)="viewUpdateDetails = !viewUpdateDetails">{{(viewUpdateDetails ? "general.hideDetails" : "general.showDetails") | translate}}</button>
+            <div *ngIf="viewUpdateDetails" class="my-2">
+                <span *ngFor="let t of updates.updates" class="d-block">{{t}}</span>
+            </div>
+            <button class="btn btn-outline-primary my-2"
+                (click)="update()">{{"general.update" | translate}}{{updating ? "..." : ""}}</button>
+        </div>
+    </div>
+</div>

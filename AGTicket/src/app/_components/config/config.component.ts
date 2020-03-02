@@ -10,10 +10,15 @@ import { ConfigService } from "../../_services/config.service";
     templateUrl: "./config.component.html",
 })
 export class ConfigComponent {
+    public updating: boolean = false;
     constructor(private fb: FormBuilder, private remoteService: RemoteService, private configService: ConfigService, private alertService: AlertService) {}
     public configForm: FormGroup;
+    public updates: any = {};
     public canValidate: boolean = false;
     public ngOnInit() {
+        this.remoteService.get("get", "config/checkForUpdates").subscribe((data) => {
+            this.updates = data.data;
+        });
         this.configForm = this.fb.group({
             title: ["", [Validators.required]],
             location: ["", [Validators.required]],
@@ -38,6 +43,15 @@ export class ConfigComponent {
             this.configForm.get("contentSpacing").setValue(config.ticketSpacing);
             this.canValidate = true;
         }, 0);
+    }
+
+    public update() {
+        this.remoteService.get("post", "config/update").subscribe((res) => {
+            this.updating = true;
+        });
+        setTimeout(() => {
+            location.reload();
+        }, 10000);
     }
 
     public save() {
