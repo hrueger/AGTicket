@@ -1,9 +1,10 @@
 import { Component, ViewChild } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
-import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel } from "@syncfusion/ej2-angular-grids";
+import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column } from "@syncfusion/ej2-angular-grids";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { AlertService } from "../../_services/alert.service";
+import { DatePipe } from "@angular/common";
 
 @Component({
     selector: "app-tickets",
@@ -18,9 +19,10 @@ export class TicketsComponent {
     @ViewChild("grid") public grid: GridComponent;
     public rowsSelected: number = 0;
     public printing: boolean = false;
-    deleting: boolean;
+    public deleting: boolean;
+    private refreshed: boolean = false;
 
-    constructor(private remoteService: RemoteService, private httpClient: HttpClient, private alertService: AlertService) {}
+    constructor(private remoteService: RemoteService, private httpClient: HttpClient, private alertService: AlertService, private datePipe: DatePipe) {}
 
     public ngOnInit() {
         this.remoteService.get("get", "tickets").subscribe((res) => {
@@ -44,6 +46,41 @@ export class TicketsComponent {
                 this.rowsSelected = this.grid.getSelectedRows().length;
             });
         }, 10);
+    }
+
+    public dataBound(args: any) {
+        if (this.refreshed) {
+            return;
+        } else {
+            this.refreshed = true;
+        }
+        for (const col of (this.grid.columns as ColumnModel[])) {
+            if (col.field === "id") {
+                col.visible = false;
+            } else if (col.field == "guid") {
+                col.headerText = "Ticket #";
+                col.allowEditing = false;
+            } else if (col.field == "name") {
+                col.headerText = "Name";
+                col.allowEditing = true;
+            } else if (col.field == "createdAt") {
+                col.headerText = "Erstellt";
+                col.formatter = (field: string, data1: any, column: object) => {
+                    return this.datePipe.transform(data1.createdAt, "short");
+                }
+                col.allowEditing = false;
+            } else if (col.field == "updatedAt") {
+                col.headerText = "Aktualisiert";
+                col.formatter = (field: string, data1: any, column: object) => {
+                    return this.datePipe.transform(data1.createdAt, "short");
+                }
+                col.allowEditing = false;
+            } else if (col.field == "activated") {
+                col.headerText = "Aktiviert?";
+                col.allowEditing = false;
+            }
+        }
+        this.grid.refreshColumns();
     }
 
     public toolbarClick(action: string, event?): void {

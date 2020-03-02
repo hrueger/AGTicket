@@ -21,12 +21,12 @@
     </form>
 </div>
 <ejs-grid #grid [dataSource]="tickets" [editSettings]="editSettings" [allowPaging]="true" [allowResizing]="true" [pageSettings]="pageSettings"
-    [allowSorting]="true" [allowPdfExport]="true" [allowExcelExport]="true" [selectionSettings]="selectionOptions">
-    <e-columns>
+    [allowSorting]="true" [allowPdfExport]="true" [allowExcelExport]="true" [selectionSettings]="selectionOptions" (dataBound)="dataBound($event)">
+    <!--<e-columns>
         <e-column type="checkbox" width="50"></e-column>
         <e-column [allowEditing]= "false" field="guid" headerText="Order ID" textAlign="Right" width=120></e-column>
         <e-column field="name" headerText="Customer ID" width=150></e-column>
         <e-column field="createdAt" headerText="Ship City" width=150></e-column>
         <e-column field="updatedAt" headerText="Ship Name" width=150></e-column>
-    </e-columns>
+    </e-columns>-->
 </ejs-grid>

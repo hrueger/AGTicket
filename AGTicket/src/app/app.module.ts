@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { Location } from "@angular/common";
 import { registerLocaleData } from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
@@ -98,6 +98,7 @@ registerLocaleData(localeDe);
         SearchService,
         EditService,
         AggregateService,
+        DatePipe,
         GroupService,
         {
             provide: LOCALE_ID,
