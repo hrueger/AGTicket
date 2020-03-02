@@ -32,11 +32,13 @@
     "validTitle": "Bitte geben Sie einen gültigen Titel ein."
   },
   "general": {
+    "activated": "Aktiviert",
     "addTickets": "Tickets hinzufügen",
     "back": "Zurück",
     "barcode": "Barcode",
     "canBeEmpty": "gerne auch leer lassen",
     "createTickets": "Tickets erstellen",
+    "created": "Erstellt",
     "delete": "Löschen",
     "deleteSelectedTickets": "Ausgewählte Karten löschen",
     "email": "Email",
@@ -64,6 +66,7 @@
     "showDetails": "Details anzeigen",
     "tickets": "Tickets",
     "update": "Aktualisieren",
+    "updated": "Aktualisiert",
     "updates": "Aktualisierungen",
     "updatesAvalible": "Updates verfügbar",
     "username": "Benutzername",

@@ -20,8 +20,8 @@
         <input class="form-control" type="search" [placeholder]="'general.search' | translate" (input)="toolbarClick('search', $event)">
     </form>
 </div>
-<ejs-grid #grid [dataSource]="tickets" [editSettings]="editSettings" [allowPaging]="true" [allowResizing]="true" [pageSettings]="pageSettings"
-    [allowSorting]="true" [allowPdfExport]="true" [allowExcelExport]="true" [selectionSettings]="selectionOptions" (dataBound)="dataBound($event)">
+<ejs-grid #grid [dataSource]="tickets" [editSettings]="editSettings" [allowPaging]="true" [allowResizing]="true" [pageSettings]="pageSettings" [allowSorting]="true" [allowPdfExport]="true" [allowExcelExport]="true" [selectionSettings]="selectionOptions" (dataBound)="dataBound($event)" (actionBegin)="actionBegin($event)"
+    (actionComplete)="actionComplete($event)">
     <!--<e-columns>
         <e-column type="checkbox" width="50"></e-column>
         <e-column [allowEditing]= "false" field="guid" headerText="Order ID" textAlign="Right" width=120></e-column>

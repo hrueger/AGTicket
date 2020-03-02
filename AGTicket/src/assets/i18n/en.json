@@ -32,11 +32,13 @@
     "validTitle": "Please provide a valid title."
   },
   "general": {
+    "activated": "Activated",
     "addTickets": "Add tickets",
     "back": "Back",
     "barcode": "Barcode",
     "canBeEmpty": "can be empty",
     "createTickets": "Create tickets",
+    "created": "Created",
     "delete": "Delete",
     "deleteSelectedTickets": "Delete selected tickets",
     "email": "Email",
@@ -64,6 +66,7 @@
     "showDetails": "Show details",
     "tickets": "Tickets",
     "update": "Update",
+    "updated": "Updated",
     "updates": "Updates",
     "updatesAvalible": "Updates avalible",
     "username": "Username",

@@ -1,10 +1,11 @@
 import { Component, ViewChild } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
-import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column } from "@syncfusion/ej2-angular-grids";
+import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column, SaveEventArgs, EditEventArgs } from "@syncfusion/ej2-angular-grids";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { AlertService } from "../../_services/alert.service";
 import { DatePipe } from "@angular/common";
+import { FastTranslateService } from "../../_services/fast-translate.service";
 
 @Component({
     selector: "app-tickets",
@@ -15,29 +16,33 @@ export class TicketsComponent {
     public tickets: any = [];
     public pageSettings: PageSettingsModel = {pageSizes: [10, 50, 100, 500, 1000, 5000, 10000], pageSize: 10};
     public selectionOptions: SelectionSettingsModel = {type: "Multiple", checkboxOnly: false};
-    public editSettings: EditSettingsModel = {allowEditing: true};
+    public editSettings: EditSettingsModel = {allowEditing: true, mode: "Dialog"};
     @ViewChild("grid") public grid: GridComponent;
     public rowsSelected: number = 0;
     public printing: boolean = false;
     public deleting: boolean;
     private refreshed: boolean = false;
+    private translations: any = {};
 
-    constructor(private remoteService: RemoteService, private httpClient: HttpClient, private alertService: AlertService, private datePipe: DatePipe) {}
+    constructor(private remoteService: RemoteService,
+        private httpClient: HttpClient,
+        private alertService: AlertService,
+        private datePipe: DatePipe,
+        private fts: FastTranslateService) {}
 
-    public ngOnInit() {
+    public async ngOnInit() {
         this.remoteService.get("get", "tickets").subscribe((res) => {
             if (res) {
-                this.tickets = /*res.map((t) => {
-                    return {
-                        Nr: t.guid,
-                        Name: t.name,
-                        Erstellt: Date.parse(t.createdAt).toLocaleString(),
-                        Geändert: Date.parse(t.updatedAt).toLocaleString(),
-                        Aktiv: t.active ? "Ja" : "Nein",
-                    };
-                });*/ res;
+                this.tickets = res;
             }
         });
+        this.translations.yes = await this.fts.t("general.yes");
+        this.translations.no = await this.fts.t("general.no");
+        this.translations.createdAt = await this.fts.t("general.created");
+        this.translations.updatedAt = await this.fts.t("general.updated");
+        this.translations.number = await this.fts.t("general.number");
+        this.translations.name = await this.fts.t("general.name");
+        this.translations.activated = await this.fts.t("general.activated");
         setTimeout(() => {
             this.grid.rowDeselected.subscribe(() => {
                 this.rowsSelected = this.grid.getSelectedRows().length;
@@ -48,7 +53,7 @@ export class TicketsComponent {
         }, 10);
     }
 
-    public dataBound(args: any) {
+    public async dataBound(args: any) {
         if (this.refreshed) {
             return;
         } else {
@@ -58,29 +63,58 @@ export class TicketsComponent {
             if (col.field === "id") {
                 col.visible = false;
             } else if (col.field == "guid") {
-                col.headerText = "Ticket #";
+                col.headerText = this.translations.number;
                 col.allowEditing = false;
             } else if (col.field == "name") {
-                col.headerText = "Name";
+                col.headerText = this.translations.name;
                 col.allowEditing = true;
             } else if (col.field == "createdAt") {
-                col.headerText = "Erstellt";
+                col.headerText = this.translations.createdAt;
                 col.formatter = (field: string, data1: any, column: object) => {
                     return this.datePipe.transform(data1.createdAt, "short");
                 }
                 col.allowEditing = false;
             } else if (col.field == "updatedAt") {
-                col.headerText = "Aktualisiert";
+                col.headerText = this.translations.updatedAt;
                 col.formatter = (field: string, data1: any, column: object) => {
                     return this.datePipe.transform(data1.createdAt, "short");
                 }
                 col.allowEditing = false;
             } else if (col.field == "activated") {
-                col.headerText = "Aktiviert?";
+                col.headerText = this.translations.activated;
                 col.allowEditing = false;
+                col.formatter = (field: string, data1: any, column: object) => {
+                    return data1.activated ? `<span class="badge badge-success">${this.translations.yes}</span>` : `<span class="badge badge-danger">${this.translations.no}</span>`;
+                }
+                col.disableHtmlEncode = false;
             }
         }
         this.grid.refreshColumns();
+    }
+
+    public actionBegin(args: EditEventArgs) {
+        if (args.requestType === "beginEdit") {
+            for (const cols of (this.grid.columns as Column[])) {
+                if (cols.field === "createdAt") {
+                    cols.visible = false;
+                } else if (cols.field === "updatedAt") {
+                    cols.visible = false;
+                }
+            }
+        }
+    }
+
+    public actionComplete(args: SaveEventArgs) {
+        if (args.requestType === "save") {
+            for (const cols of (this.grid.columns as Column[])) {
+                if (cols.field === "createdAt") {
+                    cols.visible = true;
+                } else if (cols.field === "updatedAt") {
+                    cols.visible = true;
+                }
+            }
+            // save args.data
+        }
     }
 
     public toolbarClick(action: string, event?): void {
@@ -125,7 +159,7 @@ export class TicketsComponent {
 
     private openPDF(data: Blob) {
         this.printing = false;
-        const blob = new Blob([data], { type: 'application/pdf' });
+        const blob = new Blob([data], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
         window.open(url);
     }
