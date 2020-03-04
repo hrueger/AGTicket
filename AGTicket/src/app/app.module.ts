@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { NgbModalModule } from "@ng-bootstrap/ng-bootstrap";
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { ZXingScannerModule } from "@zxing/ngx-scanner";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import { TabModule } from "@syncfusion/ej2-angular-navigations";
@@ -31,11 +31,14 @@ import { ShortWhenPipe } from "./_pipes/short-when.pipe";
 import { TruncatePipe } from "./_pipes/truncate.pipe";
 import { AppComponent } from "./app.component";
 import { routes } from "./app.routes";
-import { GridModule, PageService, SortService, FilterService, GroupService, SearchService, AggregateService, EditService, ResizeService, ToolbarService, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService, CommandColumnService, SelectionService } from '@syncfusion/ej2-angular-grids';
+import { GridModule, PageService, SortService, FilterService, GroupService, SearchService, AggregateService, EditService, ResizeService, ToolbarService, ExcelExportService, PdfExportService, ColumnChooserService, ColumnMenuService, CommandColumnService, SelectionService } from "@syncfusion/ej2-angular-grids";
 import { TicketsComponent } from "./_components/tickets/tickets.component";
 import { CreateTicketsComponent } from "./_components/createTickets/createTickets.component";
 import { ScanComponent } from "./_components/scan/scan.component";
 import { ConfigComponent } from "./_components/config/config.component";
+import { EditorComponent } from "./_components/editor/editor.component";
+import { ColorPhotoshopModule } from "ngx-color/photoshop";
+import { AngularFileUploaderModule } from "angular-file-uploader";
 
 registerLocaleData(localeDe);
 
@@ -55,6 +58,7 @@ registerLocaleData(localeDe);
         ScanComponent,
         CreateTicketsComponent,
         ConfigComponent,
+        EditorComponent,
     ],
     imports: [
         UiSwitchModule.forRoot({}),
@@ -73,6 +77,8 @@ registerLocaleData(localeDe);
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        AngularFileUploaderModule,
+        ColorPhotoshopModule,
         ToastrModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
