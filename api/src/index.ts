@@ -15,6 +15,7 @@ import routes from "./routes";
 import { toInt } from "./utils/utils";
 import { createConfig1041039482032 } from "./migration/1041039482032-createConfig";
 import { Config } from "./entity/Config";
+import * as fileUpload from "express-fileupload";
 
 i18n.configure({
   // tslint:disable-next-line: no-bitwise
@@ -48,6 +49,9 @@ createConnection({
   username: config.database_user,
 })
   .then(async (connection) => {
+
+    if (!fs.existsSync(config.files_storage_path)) { fs.mkdirSync(config.files_storage_path); }
+
     await connection.query("SET NAMES utf8mb4;");
     await connection.synchronize();
     // tslint:disable-next-line: no-console
@@ -59,6 +63,9 @@ createConnection({
     app.use(cors());
     app.use(helmet());
     app.use(bodyParser.json());
+    app.use(fileUpload({
+      limits: { fileSize: 30 * 1024 * 1024 },
+    }));
 
     // Set all routes from routes folder
     app.use("/api", routes);

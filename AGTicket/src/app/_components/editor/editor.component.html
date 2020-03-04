@@ -62,18 +62,13 @@
 
 <ng-template #uploadImageModal let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Upload image</h4>
-      <button type="button" class="close" (click)="modal.dismiss('Cross click')">
+        <h4 class="modal-title" id="modal-basic-title">Upload image</h4>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')">
         <span>&times;</span>
-      </button>
+        </button>
     </div>
     <div class="modal-body">
-        <angular-file-uploader
-            [config]="imageUploadConfig">
-        </angular-file-uploader>
+        <angular-file-uploader [config]="imageUploadConfig" (ApiResponse)="imageUploaded($event)"></angular-file-uploader>
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancelled')">Cancel</button>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancelled')">Cancel</button>
-      <button type="button" class="btn btn-outline-success" (click)="modal.close('Insert')">Insert</button>
-    </div>
-  </ng-template>
+</ng-template>

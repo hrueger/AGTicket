@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, ChangeDetectorRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { fabric } from "fabric";
 import { ColorEvent } from "ngx-color";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { environment } from "../../../environments/environment";
+import { AuthenticationService } from "../../_services/authentication.service";
 
 @Component({
   selector: "app-editor",
@@ -16,8 +18,9 @@ export class EditorComponent {
   public imageUploadConfig;
   private originalColor: string = "";
   private currentColor: string = "";
+  private imageUploadModal: any;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private authenticationService: AuthenticationService) { }
 
   public ngOnInit() {
     this.canvas = new fabric.Canvas("canvas");
@@ -42,7 +45,10 @@ export class EditorComponent {
       formatsAllowed: ".jpg,.png,.jpeg",
       maxSize: "30",
       uploadAPI: {
-        url: "https://example-file-upload-api",
+        url: `${environment.apiUrl}config/uploadImage`,
+        headers: {
+          "Authorization" : `Bearer ${this.authenticationService.currentUserValue.token}`
+        }
       },
       replaceTexts: {
         selectFileBtn: 'Select Files',
@@ -55,6 +61,16 @@ export class EditorComponent {
       }
     };
 
+  }
+
+  public imageUploaded(event) {
+      const data = JSON.parse(event.responseText);
+      if (data && data.status) {
+        this.canvas.add(fabric.Image.fromURL(`${environment.apiUrl}config/file/${data.name}`, (i) => {
+          this.canvas.add(i);
+        }));
+      }
+      this.imageUploadModal.close();
   }
 
   private selectionCreated(options) {
@@ -78,7 +94,8 @@ export class EditorComponent {
     this.refreshAllObjects();
   }
   public addImage(modal) {
-    this.modalService.open(modal).result.then((result) => {
+    this.imageUploadModal = this.modalService.open(modal);
+    this.imageUploadModal.result.then((result) => {
       console.log(result);
     }, (reason) => {
       console.log(`Dismissed ${reason}`)

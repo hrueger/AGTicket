@@ -3,12 +3,23 @@ import * as i18n from "i18n";
 import { getRepository } from "typeorm";
 import { Config } from "../entity/Config";
 import * as http from "http";
+import { config } from "../config/config";
+import * as path from "path";
 
 class ConfigController {
   public static listAll = async (req: Request, res: Response) => {
     const configRepository = getRepository(Config);
     const configs = await configRepository.find();
     res.send(configs);
+  }
+
+  public static uploadImage = async (req: any, res: Response) => {
+    req.files.file0.mv(path.join(config.files_storage_path, req.files.file0.name));
+    res.send({status: true, name: req.files.file0.name});
+  }
+
+  public static getFile = async (req: any, res: Response) => {
+    res.sendFile(path.join(config.files_storage_path, req.params.name.replace(/\//g, "_")));
   }
 
   public static save = async (req: Request, res: Response) => {

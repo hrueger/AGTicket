@@ -46,6 +46,7 @@
       "ejs": "^3.0.1",
       "email-templates": "^7.0.4",
       "express": "^4.17.1",
+      "express-fileupload": "^1.1.6",
       "helmet": "^3.21.3",
       "i18n": "^0.8.5",
       "jsonwebtoken": "^8.5.1",
