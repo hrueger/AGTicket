@@ -21,6 +21,7 @@ import { environment } from "../environments/environment";
 import { HomeComponent } from "./_components/home/home.component";
 import { LoginComponent } from "./_components/login/login.component";
 import { NavbarComponent } from "./_components/navbar/navbar.component";
+import { NgSelectModule } from "@ng-select/ng-select";
 import { UsersComponent } from "./_components/users/users.component";
 import { ErrorInterceptor } from "./_helpers/error.interceptor";
 import { JwtInterceptor } from "./_helpers/jwt.interceptor";
@@ -67,6 +68,7 @@ registerLocaleData(localeDe);
         BrowserModule,
         GridModule,
         TabModule,
+        NgSelectModule,
         NgbModule,
         BrowserModule,
         ReactiveFormsModule,

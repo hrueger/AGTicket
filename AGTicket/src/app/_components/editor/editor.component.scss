@@ -82,3 +82,14 @@ angular-file-uploader::ng-deep {
         margin-right: 0.4rem;
     }
 }
+
+.inputField {
+    width: 10rem;
+    &.form-control {
+        margin-top: 3px;
+    }
+}
+
+ng-select {
+    margin-top: -10px;
+}

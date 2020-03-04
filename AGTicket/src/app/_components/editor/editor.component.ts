@@ -7,6 +7,7 @@ import { AuthenticationService } from "../../_services/authentication.service";
 import { RemoteService } from "../../_services/remote.service";
 import { AlertService } from "../../_services/alert.service";
 import { ConfigService } from "../../_services/config.service";
+import * as FontFaceObserver from "fontfaceobserver";
 
 @Component({
   selector: "app-editor",
@@ -26,8 +27,24 @@ export class EditorComponent {
     bold: false,
     linethrough: false,
     align: "left",
-    fontsize: 30
+    fontSize: 30,
+    fontFamily: "",
   }
+  public fonts = [
+    "Arial",
+    "Roboto",
+    "Times New Roman",
+    "Verdana",
+    "Georgia",
+    "Garamond",
+    "Candara",
+    "Arial Black",
+    "Impact",
+    "Pacifico",
+    "VT323",
+    "Quicksand",
+    "Inconsolata",
+  ]
   private originalColor: string = "";
   private currentColor: string = "";
   private imageUploadModal: any;
@@ -85,6 +102,16 @@ export class EditorComponent {
       }
     };
 
+    setTimeout(async () => {
+      for(const f of this.fonts) {
+        try {
+          await (new FontFaceObserver(f).load());
+        } catch (e) {
+          //
+        }
+      }
+    });
+
   }
 
   public save() {
@@ -119,7 +146,8 @@ export class EditorComponent {
     }
     if (this.selectedObjects.length == 1 && this.selectedObjects[0].type == 'textbox') {
       const o = this.selectedObjects[0] as fabric.Textbox;
-      this.textProperties.fontsize = o.fontSize;
+      this.textProperties.fontSize = o.fontSize;
+      this.textProperties.fontFamily = o.fontFamily;
       this.textProperties.align = o.textAlign;
       this.textProperties.bold = o.fontWeight == "bold" ? true : false;
       this.textProperties.italic = o.fontStyle == "italic" ? true : false;
@@ -129,9 +157,10 @@ export class EditorComponent {
     }
   }
 
-  public updateTextProperties() {
+  public updateTextProperties(fontChanged=false) {
     const o = this.selectedObjects[0] as fabric.Textbox;
-    o.fontSize = this.textProperties.fontsize;
+    o.fontSize = this.textProperties.fontSize;
+    o.fontFamily = this.textProperties.fontFamily;
     o.textAlign = this.textProperties.align;
     o.fontWeight = this.textProperties.bold ? "bold" : "normal";
     o.fontStyle = this.textProperties.italic ? "italic" : "normal";
@@ -144,6 +173,16 @@ export class EditorComponent {
     this.canvas.renderAll();
     o.textAlign = origTextAlign;
     this.canvas.renderAll();
+    if (fontChanged) {
+      const newFont = new FontFaceObserver(this.textProperties.fontFamily);
+      newFont.load()
+        .then(() => {
+          o.fontFamily = this.textProperties.fontFamily;
+          this.canvas.renderAll();
+        }).catch((e) => {
+          //
+        });
+    }
   }
 
   public toggleVisibility(object: fabric.Object) {
@@ -152,7 +191,9 @@ export class EditorComponent {
   }
 
   public addText() {
-    this.canvas.add(new fabric.Textbox("Text"));
+    this.canvas.add(new fabric.Textbox("Text", {
+      fontFamily: "'Comic Sans'"
+    }));
     this.refreshAllObjects();
   }
   public addImage(modal) {
