@@ -75,3 +75,10 @@ angular-file-uploader::ng-deep {
         display: none;
     }
 }
+
+.dropdown-item {
+    padding-left: 0.9rem;
+    .fas {
+        margin-right: 0.4rem;
+    }
+}
