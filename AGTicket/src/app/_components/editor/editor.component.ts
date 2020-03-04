@@ -158,9 +158,9 @@ export class EditorComponent {
   public addImage(modal) {
     this.imageUploadModal = this.modalService.open(modal);
     this.imageUploadModal.result.then((result) => {
-      console.log(result);
+      //
     }, (reason) => {
-      console.log(`Dismissed ${reason}`)
+      //
     });
     this.canvas.add(new fabric.Image());
     this.refreshAllObjects();
