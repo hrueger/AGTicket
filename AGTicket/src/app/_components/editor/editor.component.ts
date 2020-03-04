@@ -19,6 +19,15 @@ export class EditorComponent {
   public allObjects: any[] = [];
   public canvas: fabric.Canvas;
   public imageUploadConfig;
+  public textProperties = {
+    underline: false,
+    italic: false,
+    overline: false,
+    bold: false,
+    linethrough: false,
+    align: "left",
+    fontsize: 30
+  }
   private originalColor: string = "";
   private currentColor: string = "";
   private imageUploadModal: any;
@@ -108,6 +117,33 @@ export class EditorComponent {
     for (const o of this.selectedObjects) {
       o.selected = true;
     }
+    if (this.selectedObjects.length == 1 && this.selectedObjects[0].type == 'textbox') {
+      const o = this.selectedObjects[0] as fabric.Textbox;
+      this.textProperties.fontsize = o.fontSize;
+      this.textProperties.align = o.textAlign;
+      this.textProperties.bold = o.fontWeight == "bold" ? true : false;
+      this.textProperties.italic = o.fontStyle == "italic" ? true : false;
+      this.textProperties.linethrough = o.linethrough;
+      this.textProperties.overline = o.overline;
+      this.textProperties.underline = o.underline;
+    }
+  }
+
+  public updateTextProperties() {
+    const o = this.selectedObjects[0] as fabric.Textbox;
+    o.fontSize = this.textProperties.fontsize;
+    o.textAlign = this.textProperties.align;
+    o.fontWeight = this.textProperties.bold ? "bold" : "normal";
+    o.fontStyle = this.textProperties.italic ? "italic" : "normal";
+    o.linethrough = this.textProperties.linethrough;
+    o.overline = this.textProperties.overline;
+    o.underline = this.textProperties.underline;
+    this.canvas.renderAll();
+    const origTextAlign = o.textAlign;
+    o.textAlign = o.textAlign == "left" ? "right" : "left";
+    this.canvas.renderAll();
+    o.textAlign = origTextAlign;
+    this.canvas.renderAll();
   }
 
   public toggleVisibility(object: fabric.Object) {
@@ -183,6 +219,7 @@ export class EditorComponent {
     this.canvas.renderAll();
     this.refreshAllObjects();
   }
+
 
   public colorPickerChange(event: ColorEvent) {
     this.currentColor = event.color.hex;
