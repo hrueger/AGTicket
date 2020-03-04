@@ -56,6 +56,21 @@ class ConfigController {
     await configRepository.save(configs);
     res.send({status: true});
   }
+
+  public static saveEditor = async (req: Request, res: Response) => {
+    const configRepository = getRepository(Config);
+    const {data} = req.body;
+    if (!data) {
+      res.status(400).send(i18n.__("errors.notAllFieldsProvided"));
+      return;
+    }
+    const c = new Config();
+    c.key = "editor";
+    c.value = JSON.stringify(data);
+    await configRepository.save(c);
+    res.send({status: true});
+  }
+
   public static checkForUpdates = async (req: Request, res: Response) => {
     try {
       let data = JSON.parse(await new Promise((resolve, reject) => {

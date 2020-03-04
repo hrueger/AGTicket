@@ -4,6 +4,9 @@ import { ColorEvent } from "ngx-color";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { environment } from "../../../environments/environment";
 import { AuthenticationService } from "../../_services/authentication.service";
+import { RemoteService } from "../../_services/remote.service";
+import { AlertService } from "../../_services/alert.service";
+import { ConfigService } from "../../_services/config.service";
 
 @Component({
   selector: "app-editor",
@@ -20,9 +23,15 @@ export class EditorComponent {
   private currentColor: string = "";
   private imageUploadModal: any;
 
-  constructor(private modalService: NgbModal, private authenticationService: AuthenticationService) { }
+  constructor(private modalService: NgbModal,
+    private authenticationService: AuthenticationService,
+    private remoteService: RemoteService,
+    private alertService: AlertService,
+    private configService: ConfigService,
+  ) { }
 
-  public ngOnInit() {
+  public async ngOnInit() {
+    const config = await this.configService.getConfig();
     this.canvas = new fabric.Canvas("canvas");
     this.canvas.on("mouse:down", (options) => {
       this.selectionCreated(options);
@@ -30,14 +39,20 @@ export class EditorComponent {
     this.canvas.on("selection:created", (options) => {
       this.selectionCreated(options);
     });
-    const circle = new fabric.Circle({
-      radius: 50, fill: "green", left: 40, top: 100
-    });
-    const triangle = new fabric.Triangle({
-      width: 100, height: 60, fill: "blue", left: 50, top: 50
-    });
+    if (config && config.editor) {
+      this.canvas.loadFromJSON(JSON.parse(config.editor), () => {
+        this.refreshAllObjects();
+      });
+    } else {
+      const circle = new fabric.Circle({
+        radius: 50, fill: "green", left: 40, top: 100
+      });
+      const triangle = new fabric.Triangle({
+        width: 100, height: 60, fill: "blue", left: 50, top: 50
+      });
 
-    this.canvas.add(circle, triangle);
+      this.canvas.add(circle, triangle);
+    }
     this.refreshAllObjects();
 
     this.imageUploadConfig = {
@@ -63,12 +78,23 @@ export class EditorComponent {
 
   }
 
+  public save() {
+    this.remoteService.get("post", "config/editor", {data: this.canvas.toJSON(["name"])}).subscribe((data) => {
+      if (data && data.status) {
+        this.alertService.success("Erfolgreich gespeichert!");
+        this.configService.reload();
+      }
+    });
+  }
+
   public imageUploaded(event) {
       const data = JSON.parse(event.responseText);
       if (data && data.status) {
-        this.canvas.add(fabric.Image.fromURL(`${environment.apiUrl}config/file/${data.name}`, (i) => {
-          this.canvas.add(i);
-        }));
+        fabric.Image.fromURL(`${environment.apiUrl}config/file/${data.name}`, (i) => {
+          if (i) {
+            this.canvas.add(i);
+          }
+        });
       }
       this.imageUploadModal.close();
   }

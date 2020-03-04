@@ -1,10 +1,6 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
   PrimaryColumn,
 } from "typeorm";
 
@@ -13,6 +9,6 @@ export class Config {
   @PrimaryColumn()
   public key: string;
 
-  @Column()
+  @Column({length: 1000000000})
   public value: string;
 }

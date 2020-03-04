@@ -9,6 +9,7 @@ router.get("/", [checkJwt], ConfigController.listAll);
 router.get("/checkForUpdates", [checkJwt], ConfigController.checkForUpdates);
 router.post("/", [checkJwt, checkForAdmin()], ConfigController.save);
 router.post("/update", [checkJwt], ConfigController.update);
+router.post("/editor", [checkJwt], ConfigController.saveEditor);
 router.post("/uploadImage", [checkJwt], ConfigController.uploadImage);
 router.get("/file/:name", [], ConfigController.getFile);
 

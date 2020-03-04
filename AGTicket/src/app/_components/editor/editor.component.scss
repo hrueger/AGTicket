@@ -43,3 +43,35 @@
     background-color: #fff;
     color: black;
 }
+
+angular-file-uploader::ng-deep {
+    .container {
+        label {
+            margin-bottom: 0;
+        }
+    }
+    .resetBtn {
+        background-color: #fff;
+        border-color: #d9534f;
+        color: #d9534f;
+        &:hover, &:active {
+            color: #fff !important;
+            background-color: #d9534f !important;
+        }
+        &:active {
+            box-shadow: 0 0 0 0.2rem rgba(223, 109, 105, 0.5) !important;
+        }
+
+    }
+    .afu-select-btn:not(:hover) {
+        background-color: #fff;
+        color: #2b669a;
+    }
+    .afu-upload-btn:not(:hover) {
+        background-color: #fff;
+        color: #5cb85c;
+    }
+    br {
+        display: none;
+    }
+}
