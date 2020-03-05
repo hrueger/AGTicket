@@ -16,6 +16,7 @@ export class ConfigComponent {
     public updates: any = {};
     public canValidate: boolean = false;
     public ngOnInit() {
+        this.configService.reload();
         this.remoteService.get("get", "config/checkForUpdates").subscribe((data) => {
             this.updates = data.data;
         });
