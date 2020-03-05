@@ -8,6 +8,8 @@ import * as QRCode from "qrcode";
 import * as bwip from "bwip-js";
 import * as PDFKit from "pdfkit";
 import { getConfig } from "../utils/utils";
+import { fabric } from "fabric";
+import * as SVGtoPDF from "svg-to-pdfkit";
 
 class TicketController {
   public static listAll = async (req: Request, res: Response) => {
@@ -119,15 +121,19 @@ async function printTickets(tickets: Ticket[], res) {
   const config = await getConfig();
 
   const ticketSpacing = parseInt(config.ticketSpacing, undefined);
-  const contentSpacing = parseInt(config.contentSpacing, undefined);
+  const borderWidth = parseInt(config.borderWidth, undefined);
   const ticketsX = parseInt(config.ticketsX, undefined);
   const ticketsY = parseInt(config.ticketsY, undefined);
+  const data = JSON.parse(config.editor);
   const title = config.title;
   const location = config.location;
   const date = config.date;
 
   const fullheight = 793;
   const fullwidth = 611;
+  const editorCanvasScaleFactor = 5;
+  const horizontalExportFactor = 0.580;
+  const verticalExportFactor = 0.589;
   const qrSize = 70;
   const barcodeSize = 30;
   const pageHeight = fullheight - (2 * ticketSpacing);
@@ -139,14 +145,63 @@ async function printTickets(tickets: Ticket[], res) {
   document.pipe(res);
   let x = 0;
   let y = 0;
+  const f = new fabric.StaticCanvas(null, {
+    // @ts-ignore
+    width: ticketWidth * editorCanvasScaleFactor,
+    height: ticketHeight * editorCanvasScaleFactor,
+  });
+  f.loadFromJSON(data, () => {
+    //
+  });
+  // right
+  f.add(new fabric.Rect({
+    left: ticketWidth / horizontalExportFactor,
+    top: 0,
+    height: ticketHeight / verticalExportFactor + 50,
+    width: 100,
+    fill: "white",
+    borderColor: "white",
+  }));
+  // bottom
+  f.add(new fabric.Rect({
+    left: 0,
+    top: ticketHeight / verticalExportFactor,
+    height: 100,
+    width: ticketWidth / horizontalExportFactor,
+    fill: "white",
+    borderColor: "white",
+  }));
+  const svg = f.toSVG({
+    width: ticketWidth * editorCanvasScaleFactor * horizontalExportFactor,
+    height: ticketHeight * editorCanvasScaleFactor * verticalExportFactor,
+  });
+
   for (const ticket of tickets) {
     const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
     const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
-    const ticketContentStartX = ticketStartX + contentSpacing;
-    const ticketContentStartY = ticketStartY + contentSpacing;
-    document.fillColor("black");
-    document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
-    document.fontSize(20);
+
+    SVGtoPDF(document, svg, ticketStartX, ticketStartY, {
+      width: ticketWidth * 0.5,
+      height: ticketHeight,
+      imageCallback: () => {
+        //
+      },
+      documentCallback:  () => {
+        //
+      },
+      warningCallback: (w) => {
+        console.log(w);
+      },
+      assumePt: true,
+      precision: 3,
+    });
+
+    if (borderWidth > 0) {
+      document.fillColor("black");
+      document.lineWidth(borderWidth);
+      document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
+    }
+    /*document.fontSize(20);
     document.text(title, ticketContentStartX, ticketContentStartY);
     document.fontSize(10);
     document.text(ticket.name, ticketContentStartX, ticketContentStartY + 30);
@@ -179,7 +234,7 @@ async function printTickets(tickets: Ticket[], res) {
           height: ticketHeight - (contentSpacing * 2),
         },
       );
-    }
+    }*/
     x++;
     if (x >= ticketsX) {
       x = 0;

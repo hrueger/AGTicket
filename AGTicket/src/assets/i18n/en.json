@@ -1,7 +1,7 @@
 {
   "config": {
     "codeType": "Code type",
-    "contentSpacing": "Spacing of content",
+    "borderWidth": "Border width",
     "date": "Date",
     "idType": "ID type",
     "location": "Location",

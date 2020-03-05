@@ -15,6 +15,7 @@ import * as FontFaceObserver from "fontfaceobserver";
   styleUrls: ["./editor.component.scss"]
 })
 export class EditorComponent {
+  public readonly editorCanvasScaleFactor: number = 5;
   public showColorPicker: boolean = false;
   public selectedObjects: any[] = [];
   public allObjects: any[] = [];
@@ -62,8 +63,8 @@ export class EditorComponent {
 
   public async ngOnInit() {
     const config = await this.configService.getConfig();
-    this.canvasSettings.width = Math.floor(((210 - ((config.ticketsX - 1) * config.ticketSpacing)) / config.ticketsX) * 5);
-    this.canvasSettings.height = Math.floor(((297 - ((config.ticketsY - 1) * config.ticketSpacing)) / config.ticketsY) * 5);
+    this.canvasSettings.width = Math.floor(((210 - ((config.ticketsX - 1) * config.ticketSpacing)) / config.ticketsX) * this.editorCanvasScaleFactor);
+    this.canvasSettings.height = Math.floor(((297 - ((config.ticketsY - 1) * config.ticketSpacing)) / config.ticketsY) * this.editorCanvasScaleFactor);
     setTimeout(() => {
     this.canvas = new fabric.Canvas("canvas");
     this.canvas.on("mouse:down", (options) => {

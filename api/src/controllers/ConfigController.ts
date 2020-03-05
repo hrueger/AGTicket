@@ -24,7 +24,7 @@ class ConfigController {
 
   public static save = async (req: Request, res: Response) => {
     const configRepository = getRepository(Config);
-    const {title, location, date, ticketsX, ticketsY, codeType, idType, ticketSpacing, contentSpacing} = req.body;
+    const {title, location, date, ticketsX, ticketsY, codeType, idType, ticketSpacing, borderWidth} = req.body;
     if (!(title && location && date && ticketsX && ticketsY && codeType && idType)) {
       res.status(400).send(i18n.__("errors.notAllFieldsProvided"));
       return;
@@ -33,7 +33,7 @@ class ConfigController {
       parseInt(ticketsX, undefined) < 1 || parseInt(ticketsX, undefined) > 10 ||
       parseInt(ticketsY, undefined) < 1 || parseInt(ticketsY, undefined) > 20 ||
       parseInt(ticketSpacing, undefined) < 0 || parseInt(ticketSpacing, undefined) > 50 ||
-      parseInt(contentSpacing, undefined) < 0 || parseInt(contentSpacing, undefined) > 50 ||
+      parseInt(borderWidth, undefined) < 0 || parseInt(borderWidth, undefined) > 50 ||
       !(["qr", "bar"].includes(codeType)) ||
       !(["guid", "numbers", "letters"].includes(idType)) ||
       title.trim() == "" ||
@@ -52,7 +52,7 @@ class ConfigController {
     configs.push({key: "codeType", value: codeType});
     configs.push({key: "idType", value: idType});
     configs.push({key: "ticketSpacing", value: ticketSpacing});
-    configs.push({key: "contentSpacing", value: contentSpacing});
+    configs.push({key: "borderWidth", value: borderWidth});
     await configRepository.save(configs);
     res.send({status: true});
   }

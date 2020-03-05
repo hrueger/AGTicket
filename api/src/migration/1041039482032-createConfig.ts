@@ -15,7 +15,7 @@ export class createConfig1041039482032 implements MigrationInterface {
         configs.push({key: "codeType", value: "qr"});
         configs.push({key: "idType", value: "guid"});
         configs.push({key: "ticketSpacing", value: "15"});
-        configs.push({key: "contentSpacing", value: "10"});
+        configs.push({key: "borderWidth", value: "1"});
         const configRepo = getRepository(Config);
         return configRepo.save(configs);
     }

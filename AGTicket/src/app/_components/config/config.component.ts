@@ -29,7 +29,7 @@ export class ConfigComponent {
             ticketsX: ["", [Validators.required, Validators.min(1), Validators.max(10)]],
             ticketsY: ["", [Validators.required, Validators.min(1), Validators.max(20)]],
             ticketSpacing: ["", [Validators.required, Validators.min(0), Validators.max(50)]],
-            contentSpacing: ["", [Validators.required, Validators.min(0), Validators.max(50)]],
+            borderWidth: ["", [Validators.required, Validators.min(0), Validators.max(50)]],
         });
         setTimeout(async () => {
             const config = await this.configService.getConfig();
@@ -40,8 +40,8 @@ export class ConfigComponent {
             this.configForm.get("idType").setValue(config.idType);
             this.configForm.get("ticketsX").setValue(config.ticketsX);
             this.configForm.get("ticketsY").setValue(config.ticketsY);
-            this.configForm.get("ticketSpacing").setValue(config.contentSpacing);
-            this.configForm.get("contentSpacing").setValue(config.ticketSpacing);
+            this.configForm.get("ticketSpacing").setValue(config.ticketSpacing);
+            this.configForm.get("borderWidth").setValue(config.borderWidth);
             this.canValidate = true;
         }, 0);
     }
@@ -69,7 +69,7 @@ export class ConfigComponent {
             ticketsX: this.configForm.get("ticketsX").value,
             ticketsY: this.configForm.get("ticketsY").value,
             ticketSpacing: this.configForm.get("ticketSpacing").value,
-            contentSpacing: this.configForm.get("contentSpacing").value,
+            borderWidth: this.configForm.get("borderWidth").value,
         }).subscribe((data) => {
             if (data && data.status) {
                 this.alertService.success("Erfolgreich gespeichert!");
