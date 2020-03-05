@@ -9,6 +9,6 @@ export class Config {
   @PrimaryColumn()
   public key: string;
 
-  @Column({length: 1000000000})
+  @Column({length: 10000})
   public value: string;
 }
