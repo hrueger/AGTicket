@@ -20,6 +20,10 @@ export class EditorComponent {
   public allObjects: any[] = [];
   public canvas: fabric.Canvas;
   public imageUploadConfig;
+  public canvasSettings = {
+    height: 100,
+    width: 100,
+  }
   public textProperties = {
     underline: false,
     italic: false,
@@ -58,6 +62,9 @@ export class EditorComponent {
 
   public async ngOnInit() {
     const config = await this.configService.getConfig();
+    this.canvasSettings.width = Math.floor(((210 - ((config.ticketsX - 1) * config.ticketSpacing)) / config.ticketsX) * 5);
+    this.canvasSettings.height = Math.floor(((297 - ((config.ticketsY - 1) * config.ticketSpacing)) / config.ticketsY) * 5);
+    setTimeout(() => {
     this.canvas = new fabric.Canvas("canvas");
     this.canvas.on("mouse:down", (options) => {
       this.selectionCreated(options);
@@ -80,6 +87,7 @@ export class EditorComponent {
       this.canvas.add(circle, triangle);
     }
     this.refreshAllObjects();
+    });
 
     this.imageUploadConfig = {
       multiple: false,
