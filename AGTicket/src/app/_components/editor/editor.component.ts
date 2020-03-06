@@ -241,34 +241,54 @@ export class EditorComponent {
     this.refreshAllObjects();
   }
 
-  public bringForward() {
-    for (const o of this.selectedObjects) {
-      o.bringForward();
-      o.dirty = true;
+  public bringForward(object?) {
+    if (object) {
+      object.bringForward();
+      object.dirty = true;
+    } else {
+      for (const o of this.selectedObjects) {
+        o.bringForward();
+        o.dirty = true;
+      }
     }
     this.canvas.renderAll();
     this.refreshAllObjects();
   }
-  public bringToFront() {
-    for (const o of this.selectedObjects) {
-      o.bringToFront();
-      o.dirty = true;
+  public bringToFront(object?) {
+    if (object) {
+      object.bringToFront();
+      object.dirty = true;
+    } else {
+      for (const o of this.selectedObjects) {
+        o.bringToFront();
+        o.dirty = true;
+      }
     }
     this.canvas.renderAll();
     this.refreshAllObjects();
   }
-  public sendToBack() {
-    for (const o of this.selectedObjects) {
-      o.sendToBack();
-      o.dirty = true;
+  public sendToBack(object?) {
+    if (object) {
+      object.sendToBack();
+      object.dirty = true;
+    } else {
+      for (const o of this.selectedObjects) {
+        o.sendToBack();
+        o.dirty = true;
+      }
     }
     this.canvas.renderAll();
     this.refreshAllObjects();
   }
-  public sendBackwards() {
-    for (const o of this.selectedObjects) {
-      o.sendBackwards();
-      o.dirty = true;
+  public sendBackwards(object?) {
+    if (object) {
+      object.sendBackwards();
+      object.dirty = true;
+    } else {
+      for (const o of this.selectedObjects) {
+        o.sendBackwards();
+        o.dirty = true;
+      }
     }
     this.canvas.renderAll();
     this.refreshAllObjects();

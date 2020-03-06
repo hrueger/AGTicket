@@ -110,9 +110,13 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <button *ngIf="!object.renaming" class="btn autohide" (click)="object.renaming = true"><i class="fa fa-pen"></i></button>
-                    <button *ngIf="!object.renaming" class="btn text-danger autohide" (click)="delete(object)"><i class="fa fa-trash"></i></button>
+                <div *ngIf="!object.renaming">
+                    <button class="btn text-primary autohide" (click)="sendToBack(object)"><i class="fas fa-arrow-circle-down"></i></button>
+                    <button class="btn text-primary autohide" (click)="sendBackwards(object)"><i class="fas fa-arrow-down"></i></button>
+                    <button class="btn text-primary autohide" (click)="bringForward(object)"><i class="fas fa-arrow-up"></i></button>
+                    <button class="btn text-primary autohide" (click)="bringToFront(object)"><i class="fas fa-arrow-circle-up"></i></button>
+                    <button class="btn text-info autohide" (click)="object.renaming = true"><i class="fa fa-pen"></i></button>
+                    <button class="btn text-danger autohide" (click)="delete(object)"><i class="fa fa-trash"></i></button>
                 </div>
             </div>
         </div>
