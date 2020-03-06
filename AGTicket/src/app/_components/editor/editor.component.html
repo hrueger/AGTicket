@@ -112,6 +112,7 @@
                 </div>
                 <div>
                     <button *ngIf="!object.renaming" class="btn autohide" (click)="object.renaming = true"><i class="fa fa-pen"></i></button>
+                    <button *ngIf="!object.renaming" class="btn text-danger autohide" (click)="delete(object)"><i class="fa fa-trash"></i></button>
                 </div>
             </div>
         </div>

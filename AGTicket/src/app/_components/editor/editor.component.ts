@@ -231,9 +231,13 @@ export class EditorComponent {
   public color() {
     this.showColorPicker = true;
   }
-  public delete() {
-    this.canvas.remove(...this.selectedObjects);
-    this.selectedObjects = [];
+  public delete(object?) {
+    if (object) {
+      this.canvas.remove(object);
+    } else {
+      this.canvas.remove(...this.selectedObjects);
+      this.selectedObjects = [];
+    }
     this.refreshAllObjects();
   }
 
