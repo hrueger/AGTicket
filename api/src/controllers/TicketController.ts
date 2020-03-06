@@ -1,27 +1,14 @@
-import { validate } from "class-validator";
 import { Request, Response } from "express";
 import * as i18n from "i18n";
 import { getRepository } from "typeorm";
 import { isArray } from "util";
 import { Ticket } from "../entity/Ticket";
-import * as QRCode from "qrcode";
-import * as bwip from "bwip-js";
-import * as PDFKit from "pdfkit";
-import { getConfig } from "../utils/utils";
-import { fabric } from "fabric";
-import * as SVGtoPDF from "svg-to-pdfkit";
 
 class TicketController {
   public static listAll = async (req: Request, res: Response) => {
     const ticketRepository = getRepository(Ticket);
     const tickets = await ticketRepository.find();
     res.send(tickets);
-  }
-
-  public static printAll = async (req: Request, res: Response) => {
-    const ticketRepository = getRepository(Ticket);
-    const tickets = await ticketRepository.find();
-    printTickets(tickets, res);
   }
 
   public static activateTicket = async (req: Request, res: Response) => {
@@ -57,14 +44,6 @@ class TicketController {
       return;
     }
     res.send({status: true});
-  }
-
-  public static printSome = async (req: Request, res: Response) => {
-    const guids = req.body.tickets;
-    const ticketRepository = getRepository(Ticket);
-    let tickets = await ticketRepository.find();
-    tickets = tickets.filter((t) => guids.includes(t.guid));
-    printTickets(tickets, res);
   }
 
   public static newTickets = async (req: Request, res: Response) => {
@@ -115,135 +94,3 @@ class TicketController {
 }
 
 export default TicketController;
-
-async function printTickets(tickets: Ticket[], res) {
-
-  const config = await getConfig();
-
-  const ticketSpacing = parseInt(config.ticketSpacing, undefined);
-  const borderWidth = parseInt(config.borderWidth, undefined);
-  const ticketsX = parseInt(config.ticketsX, undefined);
-  const ticketsY = parseInt(config.ticketsY, undefined);
-  const data = JSON.parse(config.editor);
-  const title = config.title;
-  const location = config.location;
-  const date = config.date;
-
-  const fullheight = 793;
-  const fullwidth = 611;
-  const editorCanvasScaleFactor = 5;
-  const horizontalExportFactor = 0.580;
-  const verticalExportFactor = 0.589;
-  const qrSize = 70;
-  const barcodeSize = 30;
-  const pageHeight = fullheight - (2 * ticketSpacing);
-  const pageWidth = fullwidth - (2 * ticketSpacing);
-  const ticketWidth = (pageWidth - ((ticketsX - 1) * ticketSpacing)) / ticketsX;
-  const ticketHeight = (pageHeight - ((ticketsY - 1) * ticketSpacing)) / ticketsY;
-
-  const document = new PDFKit({margin: ticketSpacing, info: {Author: "AGTicket", CreationDate: new Date(), Creator: "AGTicket", Title: "Tickets"}});
-  document.pipe(res);
-  let x = 0;
-  let y = 0;
-  const f = new fabric.StaticCanvas(null, {
-    // @ts-ignore
-    width: ticketWidth * editorCanvasScaleFactor,
-    height: ticketHeight * editorCanvasScaleFactor,
-  });
-  f.loadFromJSON(data, () => {
-    //
-  });
-  // right
-  f.add(new fabric.Rect({
-    left: ticketWidth / horizontalExportFactor,
-    top: 0,
-    height: ticketHeight / verticalExportFactor + 50,
-    width: 100,
-    fill: "white",
-    borderColor: "white",
-  }));
-  // bottom
-  f.add(new fabric.Rect({
-    left: 0,
-    top: ticketHeight / verticalExportFactor,
-    height: 100,
-    width: ticketWidth / horizontalExportFactor,
-    fill: "white",
-    borderColor: "white",
-  }));
-  const svg = f.toSVG({
-    width: ticketWidth * editorCanvasScaleFactor * horizontalExportFactor,
-    height: ticketHeight * editorCanvasScaleFactor * verticalExportFactor,
-  });
-
-  for (const ticket of tickets) {
-    const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
-    const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
-
-    SVGtoPDF(document, svg, ticketStartX, ticketStartY, {
-      width: ticketWidth * 0.5,
-      height: ticketHeight,
-      imageCallback: () => {
-        //
-      },
-      documentCallback:  () => {
-        //
-      },
-      warningCallback: (w) => {
-        console.log(w);
-      },
-      assumePt: true,
-      precision: 3,
-    });
-
-    if (borderWidth > 0) {
-      document.fillColor("black");
-      document.lineWidth(borderWidth);
-      document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
-    }
-    /*document.fontSize(20);
-    document.text(title, ticketContentStartX, ticketContentStartY);
-    document.fontSize(10);
-    document.text(ticket.name, ticketContentStartX, ticketContentStartY + 30);
-    document.text(location, ticketContentStartX, ticketContentStartY + 50);
-    document.text(date, ticketContentStartX, ticketContentStartY + 65);
-    document.fontSize(7);
-    document.fillColor("grey");
-    document.text(`Ticket #${ticket.guid}`, ticketContentStartX, ticketContentStartY + 90);
-    if (config.codeType == "qr" || config.idType == "guid") {
-      document.image(
-        await QRCode.toDataURL(ticket.guid, {margin: 1, width: qrSize}),
-        ticketContentStartX + ticketWidth - (contentSpacing * 2) - qrSize,
-        ticketContentStartY + ticketHeight - (contentSpacing * 2) - qrSize,
-      );
-    } else {
-      document.image(
-        await new Promise((resolve, reject) => {
-          bwip.toBuffer({text: ticket.guid, rotate: "L", bcid: "code128"}, (err, png) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(`data:image/png;base64, ${png.toString("base64")}`);
-            }
-          });
-        }),
-        ticketContentStartX + ticketWidth - (contentSpacing * 2) - barcodeSize,
-        ticketContentStartY,
-        {
-          width: barcodeSize,
-          height: ticketHeight - (contentSpacing * 2),
-        },
-      );
-    }*/
-    x++;
-    if (x >= ticketsX) {
-      x = 0;
-      y++;
-    }
-    if (y >= ticketsY) {
-      y = 0;
-      document.addPage();
-    }
-  }
-  document.end();
-}

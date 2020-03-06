@@ -8,6 +8,7 @@ import { RemoteService } from "../../_services/remote.service";
 import { AlertService } from "../../_services/alert.service";
 import { ConfigService } from "../../_services/config.service";
 import * as FontFaceObserver from "fontfaceobserver";
+import { FontsService } from "../../_services/fonts.service";
 
 @Component({
   selector: "app-editor",
@@ -19,6 +20,7 @@ export class EditorComponent {
   public showColorPicker: boolean = false;
   public selectedObjects: any[] = [];
   public allObjects: any[] = [];
+  public config: any = {};
   public canvas: fabric.Canvas;
   public imageUploadConfig;
   public canvasSettings = {
@@ -35,21 +37,6 @@ export class EditorComponent {
     fontSize: 30,
     fontFamily: "",
   }
-  public fonts = [
-    "Arial",
-    "Roboto",
-    "Times New Roman",
-    "Verdana",
-    "Georgia",
-    "Garamond",
-    "Candara",
-    "Arial Black",
-    "Impact",
-    "Pacifico",
-    "VT323",
-    "Quicksand",
-    "Inconsolata",
-  ]
   private originalColor: string = "";
   private currentColor: string = "";
   private imageUploadModal: any;
@@ -59,12 +46,13 @@ export class EditorComponent {
     private remoteService: RemoteService,
     private alertService: AlertService,
     private configService: ConfigService,
+    private fontsService: FontsService,
   ) { }
 
   public async ngOnInit() {
-    const config = await this.configService.getConfig();
-    this.canvasSettings.width = Math.floor(((210 - ((config.ticketsX - 1) * config.ticketSpacing)) / config.ticketsX) * this.editorCanvasScaleFactor);
-    this.canvasSettings.height = Math.floor(((297 - ((config.ticketsY - 1) * config.ticketSpacing)) / config.ticketsY) * this.editorCanvasScaleFactor);
+    this.config = await this.configService.getConfig();
+    this.canvasSettings.width = Math.floor(((210 - ((this.config.ticketsX - 1) * this.config.ticketSpacing)) / this.config.ticketsX) * this.editorCanvasScaleFactor);
+    this.canvasSettings.height = Math.floor(((297 - ((this.config.ticketsY - 1) * this.config.ticketSpacing)) / this.config.ticketsY) * this.editorCanvasScaleFactor);
     setTimeout(() => {
     this.canvas = new fabric.Canvas("canvas");
     this.canvas.on("mouse:down", (options) => {
@@ -73,8 +61,8 @@ export class EditorComponent {
     this.canvas.on("selection:created", (options) => {
       this.selectionCreated(options);
     });
-    if (config && config.editor) {
-      this.canvas.loadFromJSON(JSON.parse(config.editor), () => {
+    if (this.config && this.config.editor) {
+      this.canvas.loadFromJSON(JSON.parse(this.config.editor), () => {
         this.refreshAllObjects();
       });
     } else {
@@ -110,17 +98,7 @@ export class EditorComponent {
         afterUploadMsg_error: 'Upload Failed !'
       }
     };
-
-    setTimeout(async () => {
-      for(const f of this.fonts) {
-        try {
-          await (new FontFaceObserver(f).load());
-        } catch (e) {
-          //
-        }
-      }
-    });
-
+    this.fontsService.load();
   }
 
   public save() {

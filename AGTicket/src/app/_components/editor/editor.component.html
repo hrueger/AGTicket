@@ -15,7 +15,7 @@
 
             <div *ngIf="selectedObjects && selectedObjects.length == 1 && selectedObjects[0].type == 'textbox'" class="d-inline">
                 <ng-select
-                    [items]="fonts"
+                    [items]="fontsService.fonts"
                     class="d-inline-block inputField"
                     [clearable]="false"
                     [clearOnBackspace]="false"
