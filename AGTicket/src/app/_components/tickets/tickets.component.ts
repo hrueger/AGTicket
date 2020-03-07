@@ -7,8 +7,9 @@ import { DatePipe } from "@angular/common";
 import { FastTranslateService } from "../../_services/fast-translate.service";
 import * as PDFKit from "../../_lib/pdfkit.standalone";
 import { ConfigService } from "../../_services/config.service";
-import {fabric} from "fabric";
+import { fabric } from "fabric";
 import * as blobStream from "../../_lib/blob-stream";
+import * as QRCode from "qrcode";
 
 @Component({
     selector: "app-tickets",
@@ -17,9 +18,9 @@ import * as blobStream from "../../_lib/blob-stream";
 })
 export class TicketsComponent {
     public tickets: any = [];
-    public pageSettings: PageSettingsModel = {pageSizes: [10, 50, 100, 500, 1000, 5000, 10000], pageSize: 10};
-    public selectionOptions: SelectionSettingsModel = {type: "Multiple", checkboxOnly: false};
-    public editSettings: EditSettingsModel = {allowEditing: true, mode: "Dialog"};
+    public pageSettings: PageSettingsModel = { pageSizes: [10, 50, 100, 500, 1000, 5000, 10000], pageSize: 10 };
+    public selectionOptions: SelectionSettingsModel = { type: "Multiple", checkboxOnly: false };
+    public editSettings: EditSettingsModel = { allowEditing: true, mode: "Dialog" };
     @ViewChild("grid") public grid: GridComponent;
     public rowsSelected: number = 0;
     public printing: boolean = false;
@@ -33,7 +34,7 @@ export class TicketsComponent {
         private alertService: AlertService,
         private datePipe: DatePipe,
         private fts: FastTranslateService,
-        private configService: ConfigService) {}
+        private configService: ConfigService) { }
 
     public async ngOnInit() {
         this.config = await this.configService.getConfig();
@@ -124,7 +125,7 @@ export class TicketsComponent {
                     cols.visible = true;
                 }
             }
-            this.remoteService.getNoCache("post", `/tickets/${args.data.guid}`, {name: args.data.name}).subscribe(async (data) => {
+            this.remoteService.getNoCache("post", `/tickets/${args.data.guid}`, { name: args.data.name }).subscribe(async (data) => {
                 if (data && data.status) {
                     this.alertService.success(await this.fts.t("general.ticketUpdatedSuccessfully"));
                     this.tickets = this.tickets.map((t) => {
@@ -157,13 +158,13 @@ export class TicketsComponent {
             if (this.rowsSelected) {
                 this.printTickets(this.grid.getSelectedRecords());
             } else {
-              this.printTickets(this.tickets);
+                this.printTickets(this.tickets);
             }
         } else if (action === "deleteTickets") {
             this.deleting = true;
             if (this.rowsSelected) {
                 const guids = this.grid.getSelectedRecords().map((t: any) => t.guid);
-                this.remoteService.get("post", `tickets/delete`, {tickets: guids}).subscribe((res) => {
+                this.remoteService.get("post", `tickets/delete`, { tickets: guids }).subscribe((res) => {
                     if (res && res.status) {
                         this.deleting = false;
                         this.tickets = this.tickets.filter((t) => !guids.includes(t.guid));
@@ -185,122 +186,100 @@ export class TicketsComponent {
     }
 
 
+    public async printTickets(tickets: any[]) {
+        const ticketSpacing = parseInt(this.config.ticketSpacing, undefined);
+        const borderWidth = parseInt(this.config.borderWidth, undefined);
+        const ticketsX = parseInt(this.config.ticketsX, undefined);
+        const ticketsY = parseInt(this.config.ticketsY, undefined);
+        const data = JSON.parse(this.config.editor);
 
+        const fullheight = 793;
+        const fullwidth = 611;
+        const editorCanvasScaleFactor = 5;
+        const qrSize = 70;
+        const barcodeSize = 30;
+        const pageHeight = fullheight - (2 * ticketSpacing);
+        const pageWidth = fullwidth - (2 * ticketSpacing);
+        const ticketWidth = (pageWidth - ((ticketsX - 1) * ticketSpacing)) / ticketsX;
+        const ticketHeight = (pageHeight - ((ticketsY - 1) * ticketSpacing)) / ticketsY;
 
+        const document = new PDFKit({ margin: ticketSpacing, info: { Author: "AGTicket", CreationDate: new Date(), Creator: "AGTicket", Title: "Tickets" } });
+        const stream = document.pipe(blobStream());
+        let x = 0;
+        let y = 0;
+        const f = new fabric.Canvas(null, {
+            // @ts-ignore
+            width: ticketWidth * editorCanvasScaleFactor,
+            height: ticketHeight * editorCanvasScaleFactor,
+        });
+        f.loadFromJSON(data, () => {
+            f.renderAll();
+        });
+        await new Promise((r, u) => {
+            setTimeout(() => {
+                r();
+            }, 2000);
+        });
+        const properties: any = {};
+        f.getObjects().filter((o) => o.placeholder == "qr").forEach(async (o: fabric.Image) => {
+            properties.top = o.top;
+            properties.left = o.left;
+            properties.height = o.getScaledHeight();
+            properties.width = o.getScaledWidth();
+            f.remove(o);
+        });
+        for (const ticket of tickets) {
+            const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
+            const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
 
-  public async printTickets(tickets: any[]) {
-
-    const ticketSpacing = parseInt(this.config.ticketSpacing, undefined);
-    const borderWidth = parseInt(this.config.borderWidth, undefined);
-    const ticketsX = parseInt(this.config.ticketsX, undefined);
-    const ticketsY = parseInt(this.config.ticketsY, undefined);
-    const data = JSON.parse(this.config.editor);
-    const title = this.config.title;
-    const location = this.config.location;
-    const date = this.config.date;
-
-    const fullheight = 793;
-    const fullwidth = 611;
-    const editorCanvasScaleFactor = 5;
-    const horizontalExportFactor = 0.580;
-    const verticalExportFactor = 0.589;
-    const qrSize = 70;
-    const barcodeSize = 30;
-    const pageHeight = fullheight - (2 * ticketSpacing);
-    const pageWidth = fullwidth - (2 * ticketSpacing);
-    const ticketWidth = (pageWidth - ((ticketsX - 1) * ticketSpacing)) / ticketsX;
-    const ticketHeight = (pageHeight - ((ticketsY - 1) * ticketSpacing)) / ticketsY;
-
-    const document = new PDFKit({margin: ticketSpacing, info: {Author: "AGTicket", CreationDate: new Date(), Creator: "AGTicket", Title: "Tickets"}});
-    const stream = document.pipe(blobStream());
-    let x = 0;
-    let y = 0;
-    const f = new fabric.Canvas(null, {
-      // @ts-ignore
-      width: ticketWidth * editorCanvasScaleFactor,
-      height: ticketHeight * editorCanvasScaleFactor,
-    });
-    f.loadFromJSON(data, () => {
-        f.renderAll();
-     });
-    await new Promise((r, u) => {
-        setTimeout(() => {
-            r();
-        }, 2000);
-    });
-
-    for (const ticket of tickets) {
-      const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
-      const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
-
-      f.getObjects().filter((o) => o.placeholder).forEach((o) => {
-        if (o.placeholder == "name") {
-            o.text = ticket.name;
-        } else if (o.placeholder == "number") {
-            o.text = ticket.guid;
-        }
-      });
-
-      document.image(f.toDataURL({
-        width: ticketWidth * editorCanvasScaleFactor * 0.345,
-        height: ticketHeight * editorCanvasScaleFactor * 0.345,
-        enableRetinaScaling: true,
-      }), ticketStartX, ticketStartY, {fit: [ticketWidth, ticketHeight]});
-
-      if (borderWidth > 0 || true) {
-        document.fillColor("black");
-        document.lineWidth(borderWidth);
-        document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
-      }
-      /*document.fontSize(20);
-      document.text(title, ticketContentStartX, ticketContentStartY);
-      document.fontSize(10);
-      document.text(ticket.name, ticketContentStartX, ticketContentStartY + 30);
-      document.text(location, ticketContentStartX, ticketContentStartY + 50);
-      document.text(date, ticketContentStartX, ticketContentStartY + 65);
-      document.fontSize(7);
-      document.fillColor("grey");
-      document.text(`Ticket #${ticket.guid}`, ticketContentStartX, ticketContentStartY + 90);
-      if (config.codeType == "qr" || config.idType == "guid") {
-        document.image(
-          await QRCode.toDataURL(ticket.guid, {margin: 1, width: qrSize}),
-          ticketContentStartX + ticketWidth - (contentSpacing * 2) - qrSize,
-          ticketContentStartY + ticketHeight - (contentSpacing * 2) - qrSize,
-        );
-      } else {
-        document.image(
-          await new Promise((resolve, reject) => {
-            bwip.toBuffer({text: ticket.guid, rotate: "L", bcid: "code128"}, (err, png) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(`data:image/png;base64, ${png.toString("base64")}`);
-              }
+            f.getObjects().filter((o) => o.placeholder).forEach(async (o) => {
+                if (o.placeholder == "name") {
+                    o.text = ticket.name;
+                } else if (o.placeholder == "number") {
+                    o.text = ticket.guid;
+                }
             });
-          }),
-          ticketContentStartX + ticketWidth - (contentSpacing * 2) - barcodeSize,
-          ticketContentStartY,
-          {
-            width: barcodeSize,
-            height: ticketHeight - (contentSpacing * 2),
-          },
-        );
-      }*/
-      x++;
-      if (x >= ticketsX) {
-        x = 0;
-        y++;
-      }
-      if (y >= ticketsY) {
-        y = 0;
-        document.addPage();
-      }
+
+            await new Promise((r, u) => {
+                setTimeout(() => {
+                    r();
+                }, 500);
+            });
+
+            f.renderAll();
+            const scaleFactor = 0.345;
+            document.image(f.toDataURL({
+                width: ticketWidth * editorCanvasScaleFactor * scaleFactor,
+                height: ticketHeight * editorCanvasScaleFactor * scaleFactor,
+                enableRetinaScaling: true,
+            }), ticketStartX, ticketStartY, { fit: [ticketWidth, ticketHeight] });
+            const qrScaleFactor = 0.58;
+            document.image(await QRCode.toDataURL(ticket.guid, { margin: 1, width: qrSize}),
+                ticketStartX + (properties.left * qrScaleFactor),
+                ticketStartY + (properties.top * qrScaleFactor),
+                { fit: [properties.width * qrScaleFactor, properties.height * qrScaleFactor] }
+            );
+
+            if (borderWidth > 0 || true) {
+                document.fillColor("black");
+                document.lineWidth(borderWidth);
+                document.rect(ticketStartX, ticketStartY, ticketWidth, ticketHeight).stroke();
+            }
+            x++;
+            if (x >= ticketsX) {
+                x = 0;
+                y++;
+            }
+            if (y >= ticketsY) {
+                y = 0;
+                document.addPage();
+            }
+        }
+        document.end();
+        stream.on('finish', () => {
+            const url = stream.toBlobURL('application/pdf');
+            window.open(url, "_blank");
+            this.printing = false;
+        });
     }
-    document.end();
-    stream.on('finish', () => {
-      const url = stream.toBlobURL('application/pdf');
-      window.open(url, "_blank");
-      this.printing = false;
-    });
-  }
 }

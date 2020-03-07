@@ -75,3 +75,5 @@ import "zone.js/dist/zone"; // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 // import "core-js/es7/reflect";
+
+(window as any).global = window;
