@@ -7,9 +7,6 @@ export class createConfig1041039482032 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         const configs: Config[] = [];
-        configs.push({key: "title", value: "My event"});
-        configs.push({key: "location", value: "at that location"});
-        configs.push({key: "date", value: "on 31.14.2021"});
         configs.push({key: "ticketsX", value: "2"});
         configs.push({key: "ticketsY", value: "5"});
         configs.push({key: "codeType", value: "qr"});

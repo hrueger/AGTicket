@@ -1,29 +1,5 @@
 <form [formGroup]="configForm" [class.was-validated]="canValidate">
     <div class="form-row">
-        <div class="col-md-6 mb-3">
-            <label for="title">{{'config.title' | translate}}</label>
-            <input type="text" class="form-control" formControlName="title" id="title" required>
-            <div class="invalid-feedback">
-                {{'errors.validTitle' | translate}}
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <label for="validationCustom05">{{'config.location' | translate}}</label>
-            <input type="text" class="form-control" id="location" formControlName="location" required>
-            <div class="invalid-feedback">
-                {{'errors.validLocation' | translate}}
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <label for="validationCustom05">{{'config.date' | translate}}</label>
-            <input type="text" class="form-control" id="date" formControlName="date" required>
-            <div class="invalid-feedback">
-                {{'errors.validDate' | translate}}
-            </div>
-        </div>
-    </div>
-    <div class="form-row">
-
         <div class="col-md-3 mb-3">
             <label for="ticketsX">{{'config.ticketsX' | translate}}</label>
             <input type="number" class="form-control" id="ticketsX" min="1" max="10" formControlName="ticketsX"

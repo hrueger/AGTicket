@@ -2,13 +2,10 @@
   "config": {
     "codeType": "Codetyp",
     "borderWidth": "Konturdicke",
-    "date": "Datum",
     "idType": "Typ der ID",
-    "location": "Ort",
     "ticketSpacing": "Ticketabstand",
     "ticketsX": "Anzahl der Tickets horizontal",
-    "ticketsY": "Anzahl der Tickets vertikal",
-    "title": "Titel"
+    "ticketsY": "Anzahl der Tickets vertikal"
   },
   "create": {
     "importCSV": "CSV Datei importieren",
@@ -26,10 +23,7 @@
     "requiredFieldMissing": "Dieses Feld muss ausgefüllt werden!",
     "requiredFieldsMissing": "Bitte füllen Sie alle Pflichtfelder aus!",
     "validCodeType": "Bitte geben Sie einen gültigen Typ ein.",
-    "validDate": "Bitte geben Sie einen gültiges Datum ein.",
-    "validIdType": "Bitte geben Sie einen gültigen Typ ein.",
-    "validLocation": "Bitte geben Sie einen gültigen Ort ein.",
-    "validTitle": "Bitte geben Sie einen gültigen Titel ein."
+    "validIdType": "Bitte geben Sie einen gültigen Typ ein."
   },
   "general": {
     "activated": "Aktiviert",

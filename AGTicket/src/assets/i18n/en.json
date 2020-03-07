@@ -2,13 +2,10 @@
   "config": {
     "codeType": "Code type",
     "borderWidth": "Border width",
-    "date": "Date",
     "idType": "ID type",
-    "location": "Location",
     "ticketSpacing": "Spacing between tickets",
     "ticketsX": "Number of tickets horizontally",
-    "ticketsY": "Number of tickets vertically",
-    "title": "Title"
+    "ticketsY": "Number of tickets vertically"
   },
   "create": {
     "importCSV": "Import CSV file",
@@ -26,10 +23,7 @@
     "requiredFieldMissing": "This field can't be empty!",
     "requiredFieldsMissing": "Please fill all required fields!",
     "validCodeType": "Please provide a valid code type.",
-    "validDate": "Please provide a valid date.",
-    "validIdType": "Please provide a valid ID type.",
-    "validLocation": "Please provide a valid location.",
-    "validTitle": "Please provide a valid title."
+    "validIdType": "Please provide a valid ID type."
   },
   "general": {
     "activated": "Activated",

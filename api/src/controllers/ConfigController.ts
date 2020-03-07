@@ -28,8 +28,8 @@ class ConfigController {
 
   public static save = async (req: Request, res: Response) => {
     const configRepository = getRepository(Config);
-    const {title, location, date, ticketsX, ticketsY, codeType, idType, ticketSpacing, borderWidth} = req.body;
-    if (!(title && location && date && ticketsX && ticketsY && codeType && idType)) {
+    const {ticketsX, ticketsY, codeType, idType, ticketSpacing, borderWidth} = req.body;
+    if (!(ticketsX && ticketsY && codeType && idType)) {
       res.status(400).send(i18n.__("errors.notAllFieldsProvided"));
       return;
     }
@@ -39,18 +39,12 @@ class ConfigController {
       parseInt(ticketSpacing, undefined) < 0 || parseInt(ticketSpacing, undefined) > 50 ||
       parseInt(borderWidth, undefined) < 0 || parseInt(borderWidth, undefined) > 50 ||
       !(["qr", "bar"].includes(codeType)) ||
-      !(["guid", "numbers", "letters"].includes(idType)) ||
-      title.trim() == "" ||
-      location.trim() == "" ||
-      date.trim() == ""
+      !(["guid", "numbers", "letters"].includes(idType))
     ) {
       res.status(400).send(i18n.__("errors.notAllFieldsValid"));
       return;
     }
     const configs: Config[] = [];
-    configs.push({key: "title", value: title});
-    configs.push({key: "location", value: location});
-    configs.push({key: "date", value: date});
     configs.push({key: "ticketsX", value: ticketsX});
     configs.push({key: "ticketsY", value: ticketsY});
     configs.push({key: "codeType", value: codeType});

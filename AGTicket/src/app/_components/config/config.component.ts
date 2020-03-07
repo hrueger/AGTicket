@@ -21,9 +21,6 @@ export class ConfigComponent {
             this.updates = data.data;
         });
         this.configForm = this.fb.group({
-            title: ["", [Validators.required]],
-            location: ["", [Validators.required]],
-            date: ["", [Validators.required]],
             codeType: ["", [Validators.required]],
             idType: ["", [Validators.required]],
             ticketsX: ["", [Validators.required, Validators.min(1), Validators.max(10)]],
@@ -33,9 +30,6 @@ export class ConfigComponent {
         });
         setTimeout(async () => {
             const config = await this.configService.getConfig();
-            this.configForm.get("title").setValue(config.title);
-            this.configForm.get("location").setValue(config.location);
-            this.configForm.get("date").setValue(config.date);
             this.configForm.get("codeType").setValue(config.codeType);
             this.configForm.get("idType").setValue(config.idType);
             this.configForm.get("ticketsX").setValue(config.ticketsX);
@@ -61,9 +55,6 @@ export class ConfigComponent {
             return;
         }
         this.remoteService.get("post", "config", {
-            title: this.configForm.get("title").value,
-            location: this.configForm.get("location").value,
-            date: this.configForm.get("date").value,
             codeType: this.configForm.get("codeType").value,
             idType: this.configForm.get("idType").value,
             ticketsX: this.configForm.get("ticketsX").value,
