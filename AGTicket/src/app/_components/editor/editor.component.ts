@@ -62,9 +62,7 @@ export class EditorComponent {
       this.selectionCreated(options);
     });
     if (this.config && this.config.editor) {
-      this.canvas.loadFromJSON(JSON.parse(this.config.editor), () => {
-        this.refreshAllObjects();
-      });
+      this.loadJSON(this.config.editor);
     } else {
       const circle = new fabric.Circle({
         radius: 50, fill: "green", left: 40, top: 100
@@ -99,6 +97,14 @@ export class EditorComponent {
       }
     };
     this.fontsService.load();
+  }
+
+  private loadJSON(data) {
+    if (data) {
+      this.canvas.loadFromJSON(JSON.parse(data), () => {
+        this.refreshAllObjects();
+      });
+    }
   }
 
   public save() {
@@ -331,6 +337,18 @@ export class EditorComponent {
     downloadAnchorNode.remove();
   }
   public import() {
-    //
+    const fileInputNode = document.createElement('input');
+    fileInputNode.setAttribute("type", "file");
+    fileInputNode.onchange = (e: any) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (readerEvent) => {
+         this.loadJSON(readerEvent.target.result);
+      }
+   }
+    document.body.appendChild(fileInputNode);
+    fileInputNode.click();
+    fileInputNode.remove();
   }
 }
