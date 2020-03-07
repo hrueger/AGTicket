@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
 import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column, SaveEventArgs, EditEventArgs, DialogEdit } from "@syncfusion/ej2-angular-grids";
 import { HttpClient } from "@angular/common/http";
@@ -23,7 +23,7 @@ export class TicketsComponent {
     public editSettings: EditSettingsModel = { allowEditing: true, mode: "Dialog" };
     @ViewChild("grid") public grid: GridComponent;
     public rowsSelected: number = 0;
-    public printing: boolean = false;
+    public printing: string = "";
     public deleting: boolean;
     private refreshed: boolean = false;
     private translations: any = {};
@@ -34,7 +34,8 @@ export class TicketsComponent {
         private alertService: AlertService,
         private datePipe: DatePipe,
         private fts: FastTranslateService,
-        private configService: ConfigService) { }
+        private configService: ConfigService,
+        private cdr: ChangeDetectorRef) { }
 
     public async ngOnInit() {
         this.config = await this.configService.getConfig();
@@ -154,7 +155,7 @@ export class TicketsComponent {
         } else if (action === "search") {
             this.grid.search(event.target.value);
         } else if (action === "printTickets") {
-            this.printing = true;
+            this.printing = "0 %";
             if (this.rowsSelected) {
                 this.printTickets(this.grid.getSelectedRecords());
             } else {
@@ -177,14 +178,6 @@ export class TicketsComponent {
             console.warn(action, "not found!");
         }
     }
-
-    private openPDF(data: Blob) {
-        this.printing = false;
-        const blob = new Blob([data], { type: "application/pdf" });
-        const url = window.URL.createObjectURL(blob);
-        window.open(url);
-    }
-
 
     public async printTickets(tickets: any[]) {
         const ticketSpacing = parseInt(this.config.ticketSpacing, undefined);
@@ -228,6 +221,7 @@ export class TicketsComponent {
             properties.width = o.getScaledWidth();
             f.remove(o);
         });
+        let counter = 0;
         for (const ticket of tickets) {
             const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
             const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
@@ -274,12 +268,15 @@ export class TicketsComponent {
                 y = 0;
                 document.addPage();
             }
+            counter++;
+            this.printing = `${Math.floor(counter / tickets.length * 100)} %`;
+            this.cdr.markForCheck();
         }
         document.end();
         stream.on('finish', () => {
             const url = stream.toBlobURL('application/pdf');
             window.open(url, "_blank");
-            this.printing = false;
+            this.printing = "";
         });
     }
 }

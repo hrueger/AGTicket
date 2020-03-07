@@ -13,7 +13,7 @@
                 <button ngbDropdownItem (click)="toolbarClick('csv')">CSV</button>
             </div>
         </div>
-        <button class="btn btn-outline-success mr-2" (click)="toolbarClick('printTickets')">{{(rowsSelected ? 'general.printSelectedTickets' : 'general.printAllTickets') | translate}} ({{rowsSelected ? rowsSelected : tickets.length}}) <i *ngIf="printing" class="fa fa-spinner fa-spin"></i></button>
+        <button class="btn btn-outline-success mr-2" (click)="toolbarClick('printTickets')">{{(rowsSelected ? 'general.printSelectedTickets' : 'general.printAllTickets') | translate}} ({{rowsSelected ? rowsSelected : tickets.length}}) <i *ngIf="printing != ''" class="fa fa-spinner fa-spin"></i> {{printing}}</button>
         <button class="btn btn-outline-danger" (click)="toolbarClick('deleteTickets')" *ngIf="rowsSelected">{{'general.deleteSelectedTickets' | translate}} ({{rowsSelected}}) <i *ngIf="deleting" class="fa fa-spinner fa-spin"></i></button>
     </div>
     <form class="form-inline">
