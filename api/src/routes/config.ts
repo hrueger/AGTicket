@@ -12,5 +12,6 @@ router.post("/update", [checkJwt], ConfigController.update);
 router.post("/editor", [checkJwt], ConfigController.saveEditor);
 router.post("/uploadImage", [checkJwt], ConfigController.uploadImage);
 router.get("/file/:name", [], ConfigController.getFile);
+router.get("/placeholders/qr", [], ConfigController.getQRCodePlaceholder);
 
 export default router;

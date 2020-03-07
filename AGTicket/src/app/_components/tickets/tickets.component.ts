@@ -1,7 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
 import { PageSettingsModel, GridComponent, SelectionSettingsModel, EditSettingsModel, ColumnModel, Column, SaveEventArgs, EditEventArgs, DialogEdit } from "@syncfusion/ej2-angular-grids";
-import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { AlertService } from "../../_services/alert.service";
 import { DatePipe } from "@angular/common";
@@ -128,6 +127,12 @@ export class TicketsComponent {
             this.remoteService.getNoCache("post", `/tickets/${args.data.guid}`, {name: args.data.name}).subscribe(async (data) => {
                 if (data && data.status) {
                     this.alertService.success(await this.fts.t("general.ticketUpdatedSuccessfully"));
+                    this.tickets = this.tickets.map((t) => {
+                        if (t.guid == args.data.guid) {
+                            t.name = args.data.name;
+                        }
+                        return t;
+                    });
                 }
             });
         } else if (args.requestType === "beginEdit") {
@@ -183,7 +188,7 @@ export class TicketsComponent {
 
 
 
-  public printTickets(tickets: any[]) {
+  public async printTickets(tickets: any[]) {
 
     const ticketSpacing = parseInt(this.config.ticketSpacing, undefined);
     const borderWidth = parseInt(this.config.borderWidth, undefined);
@@ -210,18 +215,31 @@ export class TicketsComponent {
     const stream = document.pipe(blobStream());
     let x = 0;
     let y = 0;
-    const f = new fabric.StaticCanvas(null, {
+    const f = new fabric.Canvas(null, {
       // @ts-ignore
       width: ticketWidth * editorCanvasScaleFactor,
       height: ticketHeight * editorCanvasScaleFactor,
     });
     f.loadFromJSON(data, () => {
-      //
+        f.renderAll();
+     });
+    await new Promise((r, u) => {
+        setTimeout(() => {
+            r();
+        }, 2000);
     });
 
     for (const ticket of tickets) {
       const ticketStartX = (ticketSpacing * (x + 1)) + (ticketWidth * x);
       const ticketStartY = (ticketSpacing * (y + 1)) + (ticketHeight * y);
+
+      f.getObjects().filter((o) => o.placeholder).forEach((o) => {
+        if (o.placeholder == "name") {
+            o.text = ticket.name;
+        } else if (o.placeholder == "number") {
+            o.text = ticket.guid;
+        }
+      });
 
       document.image(f.toDataURL({
         width: ticketWidth * editorCanvasScaleFactor * 0.345,

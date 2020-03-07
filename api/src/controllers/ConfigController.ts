@@ -13,6 +13,10 @@ class ConfigController {
     res.send(configs);
   }
 
+  public static getQRCodePlaceholder = async (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "../../assets/placholders/qrcode.png"));
+  }
+
   public static uploadImage = async (req: any, res: Response) => {
     req.files.file0.mv(path.join(config.files_storage_path, req.files.file0.name));
     res.send({status: true, name: req.files.file0.name});

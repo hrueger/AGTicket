@@ -102,7 +102,7 @@ export class EditorComponent {
   }
 
   public save() {
-    this.remoteService.get("post", "config/editor", {data: this.canvas.toJSON(["name"])}).subscribe((data) => {
+    this.remoteService.get("post", "config/editor", {data: this.canvas.toJSON(["name", "placeholder"])}).subscribe((data) => {
       if (data && data.status) {
         this.alertService.success("Erfolgreich gespeichert!");
         this.configService.reload();
@@ -178,9 +178,7 @@ export class EditorComponent {
   }
 
   public addText() {
-    this.canvas.add(new fabric.Textbox("Text", {
-      fontFamily: "'Comic Sans'"
-    }));
+    this.canvas.add(new fabric.Textbox("Text"));
     this.refreshAllObjects();
   }
   public addImage(modal) {
@@ -191,6 +189,27 @@ export class EditorComponent {
       //
     });
     this.canvas.add(new fabric.Image());
+    this.refreshAllObjects();
+  }
+  public addQRCode() {
+    fabric.Image.fromURL(`${environment.apiUrl}config/placeholders/qr`, (i: any) => {
+      if (i) {
+        i.placeholder = "qr";
+        this.canvas.add(i);
+        this.refreshAllObjects();
+      }
+    });
+  }
+  public addName() {
+    const t = new fabric.Textbox("### Name ###") as any;
+    t.placeholder = "name";
+    this.canvas.add(t);
+    this.refreshAllObjects();
+  }
+  public addNumber() {
+    const t = new fabric.Textbox("### Number ###") as any;
+    t.placeholder = "number";
+    this.canvas.add(t);
     this.refreshAllObjects();
   }
   public addRect() {
