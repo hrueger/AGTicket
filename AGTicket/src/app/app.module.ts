@@ -40,6 +40,7 @@ import { ConfigComponent } from "./_components/config/config.component";
 import { EditorComponent } from "./_components/editor/editor.component";
 import { ColorPhotoshopModule } from "ngx-color/photoshop";
 import { AngularFileUploaderModule } from "angular-file-uploader";
+import { UnsavedDataGuard } from "./_guards/unsaved-data.guard";
 
 registerLocaleData(localeDe);
 
@@ -101,6 +102,7 @@ registerLocaleData(localeDe);
         ColumnChooserService,
         ColumnMenuService,
         CommandColumnService,
+        UnsavedDataGuard,
         SelectionService,
         FilterService,
         SearchService,

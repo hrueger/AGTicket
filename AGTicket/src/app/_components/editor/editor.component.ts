@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { fabric } from "fabric";
 import { ColorEvent } from "ngx-color";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -40,6 +40,7 @@ export class EditorComponent {
   private originalColor: string = "";
   private currentColor: string = "";
   private imageUploadModal: any;
+  public hasUnsavedData: boolean = true;
 
   constructor(private modalService: NgbModal,
     private authenticationService: AuthenticationService,
@@ -61,8 +62,14 @@ export class EditorComponent {
     this.canvas.on("selection:created", (options) => {
       this.selectionCreated(options);
     });
+    this.canvas.on("object:added", () => this.hasUnsavedData = true);
+    this.canvas.on("object:removed", () => this.hasUnsavedData = true);
+    this.canvas.on("object:modified", () => this.hasUnsavedData = true);
     if (this.config && this.config.editor) {
       this.loadJSON(this.config.editor);
+      setTimeout(() => {
+        this.hasUnsavedData = false;
+      }, 5000);
     } else {
       const circle = new fabric.Circle({
         radius: 50, fill: "green", left: 40, top: 100
@@ -107,11 +114,19 @@ export class EditorComponent {
     }
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  public unloadNotification($event: any) {
+      if (this.hasUnsavedData) {
+          $event.returnValue = true;
+      }
+  }
+
   public save() {
     this.remoteService.get("post", "config/editor", {data: this.getCanvasData()}).subscribe((data) => {
       if (data && data.status) {
         this.alertService.success("Erfolgreich gespeichert!");
         this.configService.reload();
+        this.hasUnsavedData = false;
       }
     });
   }
@@ -345,6 +360,7 @@ export class EditorComponent {
       reader.readAsText(file, "UTF-8");
       reader.onload = (readerEvent) => {
          this.loadJSON(readerEvent.target.result);
+         this.hasUnsavedData = true;
       }
    }
     document.body.appendChild(fileInputNode);

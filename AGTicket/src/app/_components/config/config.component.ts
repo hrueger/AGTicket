@@ -18,7 +18,9 @@ export class ConfigComponent {
     public ngOnInit() {
         this.configService.reload();
         this.remoteService.get("get", "config/checkForUpdates").subscribe((data) => {
-            this.updates = data.data;
+            if (data && data.data) {
+                this.updates = data.data;
+            }
         });
         this.configForm = this.fb.group({
             codeType: ["", [Validators.required]],

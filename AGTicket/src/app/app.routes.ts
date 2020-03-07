@@ -8,6 +8,7 @@ import { CreateTicketsComponent } from "./_components/createTickets/createTicket
 import { ScanComponent } from "./_components/scan/scan.component";
 import { ConfigComponent } from "./_components/config/config.component";
 import { EditorComponent } from "./_components/editor/editor.component";
+import { UnsavedDataGuard } from "./_guards/unsaved-data.guard";
 
 export const routes: Routes = [
     {
@@ -32,6 +33,7 @@ export const routes: Routes = [
     },
     {
         canActivate: [AuthGuard],
+        canDeactivate: [UnsavedDataGuard],
         component: EditorComponent,
         path: "editor"
     },
