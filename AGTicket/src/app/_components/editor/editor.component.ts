@@ -9,6 +9,7 @@ import { AlertService } from "../../_services/alert.service";
 import { ConfigService } from "../../_services/config.service";
 import * as FontFaceObserver from "fontfaceobserver";
 import { FontsService } from "../../_services/fonts.service";
+import { FastTranslateService } from "../../_services/fast-translate.service";
 
 @Component({
   selector: "app-editor",
@@ -48,6 +49,7 @@ export class EditorComponent {
     private alertService: AlertService,
     private configService: ConfigService,
     private fontsService: FontsService,
+    private fts: FastTranslateService,
   ) { }
 
   public async ngOnInit() {
@@ -253,7 +255,10 @@ export class EditorComponent {
   public color() {
     this.showColorPicker = true;
   }
-  public delete(object?) {
+  public async delete(object?) {
+    if (!confirm(await this.fts.t("general.confirmDelete"))) {
+      return;
+    }
     if (object) {
       this.canvas.remove(object);
     } else {
