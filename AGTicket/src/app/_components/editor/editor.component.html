@@ -85,7 +85,10 @@
         <button [disabled]="!selectedObjects.length" class="btn btn-outline-primary" (click)="sendBackwards()"><i class="fas fa-arrow-down"></i></button>
         <button [disabled]="!selectedObjects.length" class="btn btn-outline-primary" (click)="bringForward()"><i class="fas fa-arrow-up"></i></button>
         <button [disabled]="!selectedObjects.length" class="btn btn-outline-primary mr-2" (click)="bringToFront()"><i class="fas fa-arrow-circle-up"></i></button>
-        <button [disabled]="!selectedObjects.length" class="btn btn-outline-danger" (click)="delete()"><i class="fas fa-trash"></i></button>
+        <button [disabled]="!selectedObjects.length" class="btn btn-outline-danger mr-4" (click)="delete()"><i class="fas fa-trash"></i></button>
+        
+        <button class="btn btn-outline-success mr-2" (click)="export()"><i class="fas fa-file-export"></i></button>
+        <button class="btn btn-outline-success" (click)="import()"><i class="fas fa-file-import"></i></button>
     </div>
 </div>
 <div class="row pt-4">

@@ -102,12 +102,16 @@ export class EditorComponent {
   }
 
   public save() {
-    this.remoteService.get("post", "config/editor", {data: this.canvas.toJSON(["name", "placeholder"])}).subscribe((data) => {
+    this.remoteService.get("post", "config/editor", {data: this.getCanvasData()}).subscribe((data) => {
       if (data && data.status) {
         this.alertService.success("Erfolgreich gespeichert!");
         this.configService.reload();
       }
     });
+  }
+
+  private getCanvasData() {
+    return this.canvas.toJSON(["name", "placeholder"]);
   }
 
   public imageUploaded(event) {
@@ -315,5 +319,18 @@ export class EditorComponent {
 
   public refreshAllObjects() {
     this.allObjects = this.canvas.getObjects().reverse();
+  }
+
+  public export() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.getCanvasData()));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `AGTicket_Design_${Date.now()}.agtd`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+  public import() {
+    //
   }
 }
