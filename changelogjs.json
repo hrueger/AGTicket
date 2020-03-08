@@ -1,6 +1,7 @@
 {
     "ignoreAuthors": [
-        "greenkeeper[bot]"
+        "greenkeeper[bot]",
+        "dependabot-preview[bot]"
     ],
     "hideMergeBranch": true,
     "logoUrl": "https://raw.githubusercontent.com/hrueger/AGTicket/master/AGTicket/src/assets/logo/AGTicket.png",
