@@ -16,6 +16,7 @@ import { toInt } from "./utils/utils";
 import { createConfig1041039482032 } from "./migration/1041039482032-createConfig";
 import { Config } from "./entity/Config";
 import * as fileUpload from "express-fileupload";
+import * as proxy from "http-proxy-middleware";
 
 i18n.configure({
   // tslint:disable-next-line: no-bitwise
@@ -71,6 +72,10 @@ createConnection({
     app.use("/api", routes);
 
     // Set routes for static built frontend
+
+    // for dev:
+    // app.use("/*", proxy.createProxyMiddleware({target: 'http://localhost:4200'}));
+    // for production:
     app.use("/", express.static(path.join(__dirname, "../../frontend_build")));
 
     app.listen(config.port, () => {
