@@ -96,13 +96,13 @@ export class EditorComponent {
         }
       },
       replaceTexts: {
-        selectFileBtn: 'Select Files',
-        resetBtn: 'Reset',
-        uploadBtn: 'Upload',
-        dragNDropBox: 'Drag N Drop',
-        attachPinBtn: 'Attach Files...',
-        afterUploadMsg_success: 'Successfully Uploaded !',
-        afterUploadMsg_error: 'Upload Failed !'
+        selectFileBtn: await this.fts.t("general.selectFile"),
+        resetBtn: await this.fts.t("general.reset"),
+        uploadBtn: await this.fts.t("general.upload"),
+        dragNDropBox: "",
+        attachPinBtn: "",
+        afterUploadMsg_success: await this.fts.t("general.uploadSuccessfull"),
+        afterUploadMsg_error: await this.fts.t("general.uploadFailed"),
       }
     };
     this.fontsService.load();
@@ -124,9 +124,9 @@ export class EditorComponent {
   }
 
   public save() {
-    this.remoteService.get("post", "config/editor", {data: this.getCanvasData()}).subscribe((data) => {
+    this.remoteService.get("post", "config/editor", {data: this.getCanvasData()}).subscribe(async (data) => {
       if (data && data.status) {
-        this.alertService.success("Erfolgreich gespeichert!");
+        this.alertService.success(await this.fts.t("general.savedSuccessfully"),);
         this.configService.reload();
         this.hasUnsavedData = false;
       }
@@ -204,8 +204,8 @@ export class EditorComponent {
     this.canvas.renderAll();
   }
 
-  public addText() {
-    this.canvas.add(new fabric.Textbox("Text"));
+  public async addText() {
+    this.canvas.add(new fabric.Textbox(await this.fts.t("general.text")));
     this.refreshAllObjects();
   }
   public addImage(modal) {
@@ -227,14 +227,14 @@ export class EditorComponent {
       }
     });
   }
-  public addName() {
-    const t = new fabric.Textbox("### Name ###") as any;
+  public async addName() {
+    const t = new fabric.Textbox(`### ${await this.fts.t("general.name")} ###`) as any;
     t.placeholder = "name";
     this.canvas.add(t);
     this.refreshAllObjects();
   }
-  public addNumber() {
-    const t = new fabric.Textbox("### Number ###") as any;
+  public async addNumber() {
+    const t = new fabric.Textbox(`### ${await this.fts.t("general.number")} ###`) as any;
     t.placeholder = "number";
     this.canvas.add(t);
     this.refreshAllObjects();
