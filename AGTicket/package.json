@@ -24,7 +24,7 @@
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "@syncfusion/ej2-angular-dropdowns": "^17.4.51",
-    "@syncfusion/ej2-angular-grids": "^17.4.51",
+    "@syncfusion/ej2-angular-grids": "^17.4.55",
     "@syncfusion/ej2-angular-inputs": "^17.4.55",
     "@syncfusion/ej2-angular-layouts": "^17.4.51",
     "@syncfusion/ej2-angular-navigations": "^17.4.51",
