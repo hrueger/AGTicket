@@ -27,7 +27,7 @@
     "@syncfusion/ej2-angular-grids": "^17.4.55",
     "@syncfusion/ej2-angular-inputs": "^17.4.55",
     "@syncfusion/ej2-angular-layouts": "^17.4.51",
-    "@syncfusion/ej2-angular-navigations": "^17.4.51",
+    "@syncfusion/ej2-angular-navigations": "^17.4.55",
     "@syncfusion/ej2-angular-popups": "^17.4.51",
     "@syncfusion/ej2-layouts": "^17.4.51",
     "@zxing/ngx-scanner": "^3.0.0",
