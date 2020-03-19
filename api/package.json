@@ -21,7 +21,7 @@
    "devDependencies": {
       "@types/email-templates": "^6.0.2",
       "@types/i18n": "^0.8.6",
-      "@types/node": "^13.9.1",
+      "@types/node": "^13.9.2",
       "@types/nodemailer": "^6.4.0",
       "@types/request": "^2.48.4",
       "npx": "^10.2.2",
