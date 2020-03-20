@@ -28,3 +28,6 @@ patch:
         patched: '2020-03-20T16:14:56.575Z'
     - npx > npm > npm-registry-client > request > hawk > cryptiles > boom > hoek:
         patched: '2020-03-20T16:14:56.575Z'
+  SNYK-JS-TREEKILL-536781:
+    - ts-node-dev > tree-kill:
+        patched: '2020-03-20T17:15:07.157Z'
