@@ -51,7 +51,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.7",
     "@angular/cli": "^9.0.7",
-    "@angular/compiler-cli": "9.0.5",
+    "@angular/compiler-cli": "9.0.6",
     "@types/fabric": "^3.6.2",
     "@types/fontfaceobserver": "0.0.6",
     "@types/jasmine": "~3.5.9",
