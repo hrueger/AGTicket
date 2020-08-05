@@ -42,7 +42,7 @@
     "ejs": "^3.0.1",
     "email-templates": "^7.0.4",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.6",
+    "express-fileupload": "^1.1.9",
     "helmet": "^3.22.0",
     "http-proxy-middleware": "^1.0.3",
     "i18n": "^0.8.6",
