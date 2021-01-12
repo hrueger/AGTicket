@@ -6,7 +6,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/hrueger/AGTicket.svg)](https://greenkeeper.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue)](./LICENSE.md)
 [![GitHub last commit](https://img.shields.io/github/last-commit/hrueger/AGTicket?color=brightgreen)](https://github.com/hrueger/AGTicket/commits)
-[![Maintenance](https://img.shields.io/maintenance/yes/2020)](https://github.com/hrueger/AGTicket/commits)
+[![Maintenance](https://img.shields.io/maintenance/yes/2021)](https://github.com/hrueger/AGTicket/commits)
 
 > *Warning!* AGTicket is still in development and can't be used as of now.
 
