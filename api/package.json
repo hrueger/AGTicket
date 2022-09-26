@@ -53,7 +53,7 @@
     "socket.io": "^2.4.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "typeorm": "0.2.25",
-    "snyk": "^1.305.0"
+    "snyk": "^1.1012.0"
   },
   "scripts": {
     "tsc": "tsc",
